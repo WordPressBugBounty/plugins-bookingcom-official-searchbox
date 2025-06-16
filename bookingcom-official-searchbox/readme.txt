@@ -2,8 +2,8 @@
 Contributors: Partnerships at Booking.com 
 Tags: search hotels, searchbox, accommodation, search accommodation widget, Booking.com, official accommodation searchbox, Booking.com Official Searchbox Plugin, destinations, travel, holidays, hotels, affiliation programme 
 Requires at least: 3.0
-Tested up to: 5.9
-Stable tag: 2.3.1
+Tested up to: 6.7.2
+Stable tag: 3.0.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ The official Booking.com search box is a user-friendly, customisable plugin to a
 
 This plugin creates a search box that Booking.com Affiliate Partners can implement into their site using their affiliate ID.
 
-If you’re not an Affiliate Partner yet, you can still implement the plugin. To get the most out of the plugin and earn commission, you’ll need to sign up for the [Booking.com Affiliate Partner Programme](http://www.booking.com/content/affiliates.html).
+If you’re not an Affiliate Partner yet, you can still implement the plugin. To get the most out of the plugin and earn commission, you’ll need to sign up for the [Booking.com Affiliate Partner Programme](https://www.booking.com/affiliate-program/v2/index.html).
 
 To implement the search box, simply drag and drop the plugin to the sidebar Widget area to publish it - then you’re done!
 
@@ -30,7 +30,7 @@ You can even customize the colour, text, and size of the search box to fit your 
 * Multi-lingual search box and dashboard settings: Now available in over 40 languages and dialects.
 * Performances: Css and Javascript loaded only when needed
 * Support: You can always contact your Strategic Partnership Technical Team for technical support
-* Earn more: Join our [Booking.com Affiliate Partner Programme](http://www.booking.com/content/affiliates.html)
+* Earn more: Join our [Booking.com Affiliate Partner Programme](https://www.booking.com/affiliate-program/v2/index.html)
 
 = Possible customisation =
 
@@ -68,11 +68,11 @@ Yes, you can. The plugin has a settings area where you can change colours, texts
 
 = What's the Affiliate Programme and how can I join? =
 
-By joining the Booking.com Affiliate Program you can earn commissions on any reservation made through the search box created by this plugin. Please check this [page](http://www.booking.com/content/affiliates.html) to learn more about the Booking.com Affiliate Program.
+By joining the Booking.com Affiliate Program you can earn commissions on any reservation made through the search box created by this plugin. Please check this [page](https://www.booking.com/affiliate-program/v2/index.html) to learn more about the Booking.com Affiliate Program.
 
 = Can I use the plugin even if I'm not an affiliate yet? =
 
-Yes, it's possible. You don’t need to be an Affiliate Partner to implement the plugin, but you could start earning commissions today becoming one. [Sign-up now](https://secure.booking.com/partnerreg.html).
+Yes, it's possible. You don’t need to be an Affiliate Partner to implement the plugin, but you could start earning commissions today becoming one. [Sign-up now](https://secure.booking.com/affiliate-program/register.html?lang=en-gb).
 
 = Can I place the widget on multiple position ? =
 
@@ -91,6 +91,13 @@ The plugin will work from WP ver 3.0 onwards.
 5. Meta Boxes in post/page sections.
 
 == Changelog ==
+
+= 3.0.0 =
+* Release June 2025
+* New: Redesigned admin panel.
+* New: Calendar, with multi calendar display and range selection.
+* New: show weeknumbers on the calendar.
+* New: searchbox block editor element, add the Booking.com searchbox to your page using wordpress gutenberg block editor.
 
 = 2.3.1 =
 * Release Feb 2022

@@ -11,10 +11,33 @@
 	background: #FFF;
 }
 
+#bos_colours_tab table.form-table {
+	width: 95%;
+}
+#bos_colours_tab table.form-table tr:not(.bos-group-title-row) {
+	width: 30%;
+  display: inline-table;
+}
+#bos_colours_tab .wp-picker-container {
+	position: relative;
+}
+#bos_colours_tab .wp-picker-holder {
+	position: absolute;
+	z-index: 2;
+}
+.bos-group-title-row td {
+	padding-left: 0;
+	padding-bottom: 0;
+}
+.bos-group-title-row h3 {
+	margin-bottom: 0;
+}
+.bos-group-title-row:first-child h3 {
+	margin: 0;
+}
 #bos_preview {
 	background:transparent;
 	min-width:160px;
-	position:fixed
 }
 
 #reset_default {
@@ -23,16 +46,10 @@
 
 #bos_preview_title {
 	background:transparent;
-	left:-38px;
 	position:relative;
 	top:0;
 	z-index:101;
 	margin-top:10px
-}
-
-#bos_left {
-	float:left;
-	width:59%
 }
 
 #bos_form h3 {
@@ -42,11 +59,6 @@
 
 #b_searchboxInc h4 {
 	margin-bottom: 0;
-}
-
-#bos_right {
-	float:left;
-	margin-left:6%
 }
 
 #bos_ajax_loader {
@@ -114,4 +126,131 @@
 
 .bos_banner_plugin_promotion > p > a{
 	font-weight:bold;
+}
+.toplevel_page_bos_searchbox #wpcontent {
+	padding-left: 0;
+}
+#bos_settings {
+	padding: 0 20px;
+}
+.bos_settings {
+	margin: 0;
+}
+.bos_settings hr {
+	margin: 30px 0;
+}
+.bos_settings h1 {
+	padding-left: 20px;
+	background: #FFFFFF;
+}
+.bos_settings .nav-tab-wrapper {
+	border: unset;
+	display: inline-flex;
+	width: 100%;
+	background: white;
+}
+.bos_settings a.nav-tabs {
+	text-decoration: none;
+	display: block;
+	padding: .5rem 1rem 1rem;
+	margin: 0 1rem;
+	color: black;
+	background: #FFFFFF;
+}
+.bos_settings a.nav-tabs.nav-tab-active {
+	box-shadow: inset 0 -3px #3582c4;
+	color: #3582c4;
+  font-weight: 600;
+}
+.bos_settings .submit {
+	padding-left: 20px;
+}
+div#bos_preview_wrapper {
+	padding: 0 20px;
+}
+
+/* The switch - the box around the slider */
+.bos_toggleSection {
+	text-align: left;
+}
+.bos_toggleButtonHandles {
+	display: flex;
+	align-items: center;
+	justify-content: start;
+}
+.bos_toggleButton {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 34px;
+}
+.bos_toggleButtonSwitch {
+	padding: 0 10px;
+}
+/* Hide default HTML checkbox */
+.bos_toggleButton input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+/* The slider */
+.bos_slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	transition: .4s;
+}
+.bos_slider:before {
+	position: absolute;
+	content: "";
+	height: 26px;
+	width: 26px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	transition: .4s;
+}
+input:checked + .bos_slider {
+	background-color: #2196F3;
+}
+input:focus + .bos_slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+input:checked + .bos_slider:before {
+	transform: translateX(26px);
+}
+/* Rounded sliders */
+.bos_slider.round {
+	border-radius: 34px;
+}
+.bos_slider.round:before {
+	border-radius: 50%;
+}
+.bos_radiogroup h4.bos_radiogroup_title {
+	margin: 0;
+}
+.bos_radiogroup h4.bos_radiogroup_title.last {
+	margin-top: 10px;
+}
+.bos_radio_wrapper {
+	display: inline-flex;
+	align-items: end;
+	margin-right: 10px;
+}
+#bos_info_box {
+	position: absolute;
+	width: 75%;
+}
+.hide_el, .bos-hide {
+	display: none;
+}
+
+@media screen and (max-width: 600px) {
+	.bos_settings .nav-tab-wrapper {
+		display: inline-block;
+	}
 }

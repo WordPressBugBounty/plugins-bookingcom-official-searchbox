@@ -21,17 +21,17 @@ function bos_searchbox_install( ) {
 // Add a menu for our option page
 add_action( 'admin_menu', 'bos_searchbox_add_page' );
 function bos_searchbox_add_page( ) {
-    add_options_page( 
+    add_menu_page( 
         esc_html__('Booking.com Search Box settings', 'bookingcom-official-searchbox'), // Page title on browser bar 
         esc_html__('Booking.com Search Box', 'bookingcom-official-searchbox'), // menu item text
-        'manage_options', // only administartors can open this
+        'manage_options', // only administrators can open this
         'bos_searchbox', // unique name of settings page
-        'bos_searchbox_option_page' //call to fucntion which creates the form
+        'bos_searchbox_option_page' //call to function which creates the form
     );
 
     add_action( 'admin_enqueue_scripts', 'bos_load_styles' );
 }
-// Add settings link on plugin page
+
 
 /* Localization and internazionalization */
 add_action( 'plugins_loaded', 'bos_searchbox_init' );
@@ -45,6 +45,14 @@ function bos_searchbox_retrieve_all_user_options( ) {
     return $user_options;
 }
 
+function bos_admin_notices_action() {
+    $screen = get_current_screen();
+    if ( in_array( $screen->parent_base, array( 'bos_searchbox' ) ) ) {
+        settings_errors();
+    }
+}
+add_action( 'admin_notices', 'bos_admin_notices_action' );
+
 function bos_load_styles() {
     bos_register_scripts();
 }
@@ -53,7 +61,6 @@ if ( ! function_exists( 'bos_searchbox_settings_link' ) ) :
 
     function bos_searchbox_settings_link( $actions ) {
         $settings_link = '<a href="' . admin_url( 'options-general.php?page=bos_searchbox' ) . '">' . esc_html__( 'Settings', 'bookingcom-official-searchbox' ) . '</a>';
-        // array_unshift( $actions, $settings_link );
         array_unshift( $actions, $settings_link );
         return $actions;
     }
@@ -64,36 +71,61 @@ add_filter( 'plugin_action_links_' . BOS_PLUGIN_MAIN_FILE, 'bos_searchbox_settin
 // Register and define the settings
 add_action( 'admin_init', 'bos_searchbox_admin_init' );
 function bos_searchbox_admin_init( ) {
-    register_setting( 'bos_searchbox_settings', 'bos_searchbox_user_options', 'bos_searchbox_validate_options' );
+    register_setting( 'bos_searchbox_settings', 'bos_searchbox_user_options', array('sanitize_callback' => 'bos_searchbox_validate_options', 'show_in_rest' => true) );
+    $tab_main = (!isset($_GET['tab']) || isset($_GET['tab']) && $_GET['tab'] === 'tab_main') ? '' : ' bos-hide';
+    $tab_dest = isset($_GET['tab']) && $_GET['tab'] === 'tab_destination' ? '' : ' bos-hide';
+    $tab_colours = isset($_GET['tab']) && $_GET['tab'] === 'tab_colours' ? '' : ' bos-hide';
+    $tab_cal = isset($_GET['tab']) && $_GET['tab'] === 'tab_calendar' ? '' : ' bos-hide';
+    $tab_sb_text = isset($_GET['tab']) && $_GET['tab'] === 'tab_searchbox_text' ? '' : ' bos-hide';
     add_settings_section( //Main settings 
-        'bos_searchbox_main', //id
-        esc_html__( 'Main settings', 'bookingcom-official-searchbox' ), //title
+        'bos_section_main', //id
+        '', //title
         'bos_searchbox_section_main', //callback
-        'bos_searchbox' //page
+        'bos_searchbox', //page
+        array(
+            'before_section' => '<div class="tab-content'.$tab_main.'" id="bos_main_tab">',
+            'after_section' => '</div>'
+        )
     );
     add_settings_section( //Destination
-        'bos_searchbox_destination', //id
-        '<hr>' . esc_html__( 'Preset destination', 'bookingcom-official-searchbox' ), //title
-        'bos_searchbox_section_destination', //callback
-        'bos_searchbox' //page
+        'bos_section_destination', //id
+        '', //title
+        '', //callback
+        'bos_searchbox', //page
+        array(
+            'before_section' => '<div class="tab-content'.$tab_dest.'" id="bos_dest_tab">',
+            'after_section' => '</div>'
+        )
     );
     add_settings_section( //Color settings
-        'bos_searchbox_color',
-        '<hr>' . esc_html__( 'Colour scheme', 'bookingcom-official-searchbox' ), 
-        'bos_searchbox_section_color', 
-        'bos_searchbox' 
+        'bos_section_colours',
+        '', 
+        '', 
+        'bos_searchbox',
+        array(
+            'before_section' => '<div class="tab-content'.$tab_colours.'" id="bos_colours_tab">',
+            'after_section' => '</div>'
+        )
     );
-    add_settings_section( // Calendar Color settings
-        'bos_searchbox_calendarcolor',
-        '<hr>' . esc_html__( 'Calendar Colour scheme', 'bookingcom-official-searchbox' ), 
-        'bos_searchbox_section_calendarcolor', 
-        'bos_searchbox' 
+    add_settings_section( // Calendar settings
+        'bos_section_calendar',
+        '', 
+        '', 
+        'bos_searchbox',
+        array(
+            'before_section' => '<div class="tab-content'.$tab_cal.'" id="bos_calendar_tab">',
+            'after_section' => '</div>'
+        )
     );
     add_settings_section( //Wording settings
-        'bos_searchbox_wording',
-        '<hr>' .  esc_html__( 'Search box text', 'bookingcom-official-searchbox' ), 
-        'bos_searchbox_section_wording', 
-        'bos_searchbox' 
+        'bos_section_searchbox_text',
+        '', 
+        '', 
+        'bos_searchbox',
+        array(
+            'before_section' => '<div class="tab-content'.$tab_sb_text.'" id="bos_searchbox_text_tab">',
+            'after_section' => '</div>'
+        )
     );
     $arrayFields = bos_searchbox_settings_fields_array();
     foreach ( $arrayFields as $field ) {
@@ -101,49 +133,28 @@ function bos_searchbox_admin_init( ) {
             esc_html__( $field[ 2 ], 'bookingcom-official-searchbox' ), //title
             'bos_searchbox_settings_field', //callback
             'bos_searchbox', //page
-            'bos_searchbox_' . $field[ 7 ], //section
+            'bos_section_' . $field[ 7 ], //section
             $args = array(
-                $field[ 0 ],
-                $field[ 1 ],
-                $field[ 3 ],
-                $field[ 4 ],
-                $field[ 5 ],
-                $field[ 8 ] 
+                $field[ 0 ], // id
+                $field[ 1 ], // type
+                $field[ 3 ], // description
+                $field[ 4 ], // max input length
+                $field[ 5 ], // input size
+                $field[ 8 ], // placeholder
+                $field[ 9 ], // before text
+                $field[ 10 ], // after text
+                $field[ 11 ], // hint
+                $field[ 12 ], // group
+                'class' => preg_match('#(logodim|logopos)#', $field[ 0 ]) ? $field[ 0 ] . '_wrapper hidden' : $field[ 0 ]
             ) //args
         );
     } //$arrayFields as $field
 }
 
-// Draw section header
 function bos_searchbox_section_main( ) {
-    echo '<div id="bos_main_settings_wrapper">';
-    echo '<p><em>' . esc_html__( 'Use these settings to customise your search box.', 'bookingcom-official-searchbox' ) . '</em></p>';
     echo '<span id="bos_ajax_nonce" class="hidden" style="visibility: hidden;">' . wp_create_nonce( 'bos_ajax_nonce' ) . '</span>';
-    echo '</div>';
 }
-function bos_searchbox_section_destination( ) {
-    echo '<div id="bos_dest_settings_wrapper" class="bos_hide">';
-    echo '<p><em>' . wp_kses_post( __( 'Use the following fields to select a specific destination. <em>Destination types</em> and <em>IDs</em> make guest searches more accurate.', 'bookingcom-official-searchbox' ) ) . '</em><span></span></p>';
-    echo '</div>';
-}
-// Draw color section header
-function bos_searchbox_section_color( ) {
-    echo '<div id="bos_color_settings_wrapper" class="bos_hide">';
-    echo '<p><em>' . esc_html__( 'Enter your colour scheme settings here.', 'bookingcom-official-searchbox' ) . '</em><span></span></p>';
-    echo '</div>';
-}
-// Draw color section header
-function bos_searchbox_section_calendarcolor( ) {
-    echo '<div id="bos_calendar_color_settings_wrapper" class="bos_hide">';
-    echo '<p><em>' . esc_html__( 'Enter your calendar colour scheme settings here.', 'bookingcom-official-searchbox' ) . '</em><span></span></p>';
-    echo '</div>';
-}
-// Draw wording section header
-function bos_searchbox_section_wording( ) {
-    echo '<div id="bos_wording_settings_wrapper" class="bos_hide">';
-    echo '<p><em>' . esc_html__( 'Customise the search box text here.', 'bookingcom-official-searchbox' ) . '</em><span></span></p>';
-    echo '</div>';
-}
+
 // Display and fill general fields
 function bos_searchbox_settings_field( $args ) {
     // get options value from the database        
@@ -153,7 +164,6 @@ function bos_searchbox_settings_field( $args ) {
     if ( !empty( $options[ $fields_array ] ) ) {
         $fields_value = $options[ $fields_array ]; // if user eneterd values fields_value
     } //!empty( $options[ $fields_array ] )
-    // $output = '';
     // echo the fields
     if ( $args[ 1 ] == 'text' ) {
         echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" id="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '" ';
@@ -166,10 +176,6 @@ function bos_searchbox_settings_field( $args ) {
         if ( !empty( $args[ 5 ] ) ) {
             echo ' placeholder="' . esc_attr($args[ 5 ]) . '" ';
         } //!empty( $args[ 5 ] )
-        // If default plugin values empty show default values  ( but for aid as we do not want the default aid is shown on the input field )
-        if ( $args[ 0 ] == 'aid' && ( $fields_value == BOS_DEFAULT_AID || empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' || !is_numeric( $fields_value ) ) ) {
-            $fields_value = '';
-        } //$args[ 0 ] == 'aid' && ( $fields_value == BOS_DEFAULT_AID || empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' || !is_numeric( $fields_value ) )
         // Color scheme default values in case no custom values
         if ( $args[ 0 ] == 'bgcolor' && ( empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' ) ) {
             $fields_value = BOS_BGCOLOR;
@@ -217,15 +223,39 @@ function bos_searchbox_settings_field( $args ) {
         echo 'value="' . esc_html($fields_value) . '" />&nbsp;' . wp_kses_post( __( $args[ 2 ], 'bookingcom-official-searchbox' ) );
         if ( $args[ 0 ] == 'dest_id' ) {
             echo '<div id="bos_info_box" style="display: none;padding: 1em; background-color:#FFFFE0;border:1px solid  #E6DB55; margin:10px 0 10px;">';
-            echo wp_kses_post( __( 'For more info on your destination ID, login to the <a href="https://admin.booking.com/partner/" target="_blank">Partner Center</a>. Check <em>&quot;URL constructor&quot;</em> section to find your destination ID. These IDs, also known as UFIs, are usually a negative number ( e.g. <strong>-2140479 is for Amsterdam</strong> , but can be positive ones in the US ) while regions, district and landmarks are always positive ( e.g. <strong>1408 is for Ibiza</strong> ).', 'bookingcom-official-searchbox' ) );
+            echo wp_kses_post( __( 'For more info on your destination ID and destination type, login to the <a href="https://spadmin.booking.com/partner/login-v3.html" target="_blank">Partner Center</a>. Check "Marketplace --> All products" and search for "Affiliate links" card.', 'bookingcom-official-searchbox' ) );
             echo '</div>';
         } //$args[ 0 ] == 'dest_id'
     } // $args[ 1 ] == 'text'
+    elseif ( $args[ 1 ] == 'switch' ) {
+        $checked_value = 'checked="checked"';
+        if (!empty($fields_value)) {
+            $checked_value = checked( 1, esc_attr($fields_value), false );
+        }
+        echo '<div class="bos_toggleSection"><div class="bos_toggleButtonHandles">';
+        echo '<div class="bos_beforeToggleLabel">' . esc_attr($args[ 6 ]) . '</div>';
+        echo '<div class="bos_toggleButtonSwitch"><label class="bos_toggleButton">';
+        echo '<input type="checkbox" name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" id="' . esc_attr($args[ 0 ]) . '" ' . $checked_value . '>';
+        echo '<span class="bos_slider round"></span></label></div>';
+        echo '<div class="bos_afterToggleLabel">' . esc_attr($args[ 7 ]) . '</div>';
+        echo '</div>';
+        echo '<div class="bos_toggleContent"><p class="description">' . esc_attr($args[ 8 ]) . '</p></div>';
+        echo '</div>';
+    }
     elseif ( $args[ 1 ] == 'number' ) {
         echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" id="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '" ';
         if ( $args[ 0 ] == 'headline_textsize' && ( empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' ) ) {
             $fields_value = BOS_HEADLINE_SIZE;
         } //$args[ 0 ] == 'headline_textsize' && ( empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' )
+        elseif ($args[ 0 ] == 'fields_border_radius' && ( empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' )) {
+            $fields_value = BOS_FIELDS_BORDER_RADIUS;
+        }
+        elseif ($args[ 0 ] == 'sb_border_radius' && ( empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' )) {
+            $fields_value = BOS_SB_BORDER_RADIUS;
+        }
+        elseif ( $args[ 0 ] == 'aid' && ( $fields_value == BOS_DEFAULT_AID || empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' ) ) {
+            $fields_value = '';
+        } //$args[ 0 ] == 'aid' && ( $fields_value == BOS_DEFAULT_AID || empty( $fields_value ) || $fields_value == '' || $fields_value == ' ' || !is_numeric( $fields_value ) )
         echo 'value="' . esc_html($fields_value) . '" />&nbsp;' . wp_kses_post( __( $args[ 2 ], 'bookingcom-official-searchbox' ) );
     } // $args[ 1 ] == 'number'
     elseif ( $args[ 1 ] == 'checkbox' ) {
@@ -239,11 +269,11 @@ function bos_searchbox_settings_field( $args ) {
                 $fields_value = BOS_FLEXIBLE_DATES;
             } // default values
         } //$args[ 0 ] == 'flexible_dates'
-        /*else if ( $args[ 0 ] == 'save_button_on_widget' )  {
-        
-        if ( empty( $fields_value ) ) { $fields_value = BOS_SAVE_BUTTON ; } // default values
-        
-        }  */
+        else if ( $args[ 0 ] == 'show_weeknumbers' ) {
+            if ( empty( $fields_value ) ) {
+                $fields_value = BOS_SHOW_WEEKNUMBERS;
+            }
+        }
         echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" id="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '"  ' . checked( 1, esc_attr($fields_value), false ) . ' />';
     } //$args[ 1 ] == 'checkbox'
     elseif ( $args[ 1 ] == 'radio' ) {
@@ -261,12 +291,12 @@ function bos_searchbox_settings_field( $args ) {
             if ( empty( $fields_value ) ) {
                 $fields_value = BOS_LOGODIM;
             } // default values
-            echo '<span id="bos_img_blue_logo" class="bos_logo_dim_box" style="background: ' . esc_attr($bgcolor) . ';"><img  src="' . BOS_PLUGIN_ASSETS . '/images/booking_logotype_blue_150x25.png" alt="Booking.com logo" /></span>';
+            echo '<span id="bos_img_blue_logo" class="bos_logo_dim_box" style="background: ' . esc_attr($bgcolor) . ';"><img  src="' . BOS_PLUGIN_ASSETS . '/images/booking_logo_blue_150x25.png" alt="Booking.com logo" /></span>';
             echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" class="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '"  value="blue_150x25"  ' . checked( 'blue_150x25', esc_attr($fields_value), false ) . ' />&nbsp;( 150x25 )&nbsp;';
             echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" class="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '"  value="blue_200x33"  ' . checked( 'blue_200x33', esc_attr($fields_value), false ) . ' />&nbsp;( 200x33 )&nbsp;';
             echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" class="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '"  value="blue_300x50" ' . checked( 'blue_300x50', esc_attr($fields_value), false ) . ' />&nbsp;( 300x50 )&nbsp;';
             echo '<br /><br />';
-            echo '<span id="bos_img_white_logo" class="bos_logo_dim_box" style="background: ' . esc_attr($bgcolor) . ';"><img src="' . BOS_PLUGIN_ASSETS . '/images/booking_logotype_white_150x25.png" alt="Booking.com logo" /></span>';
+            echo '<span id="bos_img_white_logo" class="bos_logo_dim_box" style="background: ' . esc_attr($bgcolor) . ';"><img src="' . BOS_PLUGIN_ASSETS . '/images/booking_logo_white_150x25.png" alt="Booking.com logo" /></span>';
             echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" class="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '"  value="white_150x25" ' . checked( 'white_150x25', esc_attr($fields_value), false ) . ' />&nbsp;( 150x25 )&nbsp;';
             echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" class="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '"  value="white_200x33" ' . checked( 'white_200x33', esc_attr($fields_value), false ) . ' />&nbsp;( 200x33 )&nbsp;';
             echo '<input name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" class="' . esc_attr($args[ 0 ]) . '" type="' . esc_attr($args[ 1 ]) . '"  value="white_300x50" ' . checked( 'white_300x50', esc_attr($fields_value), false ) . ' />&nbsp;( 300x50 )&nbsp;';
@@ -279,7 +309,7 @@ function bos_searchbox_settings_field( $args ) {
             echo '<option value="center" ' . selected( 'center', esc_attr($fields_value), false ) . ' >' . esc_html__( 'Centre', 'bookingcom-official-searchbox' ) . '</option>';
             echo '<option value="right" ' . selected( 'right', esc_attr($fields_value), false ) . ' >' . esc_html__( 'Right', 'bookingcom-official-searchbox' ) . '</option>';
             echo '</select>';
-        } // $args[ 0 ] == 'logopos'                               
+        } // $args[ 0 ] == 'logopos'
         if ( $args[ 0 ] == 'buttonpos' ) {
             if ( empty( $fields_value ) ) {
                 $fields_value = BOS_BUTTONPOS;
@@ -300,195 +330,279 @@ function bos_searchbox_settings_field( $args ) {
             echo '<option value="airport" ' . selected( 'airport', esc_attr($fields_value), false ) . ' >' . esc_html__( 'airport', 'bookingcom-official-searchbox' ) . '</option>';
             echo '</select>';
         } //$args[ 0 ] == 'dest_type'
-        if ( $args[ 0 ] == 'widget_width_suffix' ) {
-            echo '<select name="bos_searchbox_user_options[' . esc_attr($fields_array) . ']" id="' . esc_attr($args[ 0 ]) . '" >';
-            echo '<option value="px" ' . selected( 'px', esc_attr($fields_value), false ) . ' >' . esc_html__( 'px', 'bookingcom-official-searchbox' ) . '</option>';
-            echo '<option value="%" ' . selected( '%', esc_attr($fields_value), false ) . ' >' . esc_html__( '%', 'bookingcom-official-searchbox' ) . '</option>';
-            echo '</select>&nbsp;' . wp_kses_post( __( $args[ 2 ], 'bookingcom-official-searchbox' ) );
-        }
     } // $args[ 1 ] == 'select'
 }
 
-// Validate user inputs 
 function bos_searchbox_validate_options( $input ) {
-    $valid       = array( );
-    $message     = array( );
-    $error       = false;
-    $arrayFields = bos_searchbox_settings_fields_array();
-    foreach ( $arrayFields as $field ) {
-        if ( $field[ 1 ] == 'text' ) {
-            if ( $field[ 0 ] == 'display_in_custom_post_types' ) {
-                // accept only string with letters ( lowercase and uppercase ), numbers,dash, underscore and commas
-                if ( !empty( $input[ $field[ 0 ] ] ) ) {
-                    if ( preg_match( '/^[a-zA-Z0-9-_,]+$/', $input[ $field[ 0 ] ] ) ) {
-                        $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                    } //preg_match( '/^[a-zA-Z0-9-_,]+$/', $input[ $field[ 0 ] ] )
-                    else {
-                        $error      = true;
-                        $message[ ] = '"' . esc_html($field[ 2 ]) . '": ' . esc_html__( 'Use only alphanumeric strings and commas for multiple slugs', 'bookingcom-official-searchbox' ) . '<br>';
-                    }
-                } // if( !empty( $input[ $field[ 0 ] ] )  )
-            } //$field[ 0 ] == 'display_in_custom_post_types'
-            if ( $field[ 0 ] == 'cname' ) {
-                if ( !empty( $input[ $field[ 0 ] ] ) ) {
-                    if ( preg_match( '/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-_]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$/', $input[ $field[ 0 ] ] ) ) {
-                        $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                    } //preg_match( '/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-_]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$/')
-                    else {
-                        $error      = true;
-                        $message[ ] = '"' . esc_html($field[ 2 ]) . '": ' . esc_html__( 'Cname format is incorrect', 'bookingcom-official-searchbox' ) . '<br>';
-                    }
-                }// if ( !empty( $input[ $field[ 0 ] ] ) )
-            } //$field[ 0 ] == 'cname'
-            else {
-                $valid[ $field[ 0 ] ] = sanitize_text_field( $input[ $field[ 0 ] ] ); //sanitize and escape malicius input
-                if ( $valid[ trim( $field[ 0 ] ) ] != trim( $input[ $field[ 0 ] ] ) ) {
-                    $error      = true;
-                    $message[ ] = '"' . esc_html($field[ 2 ]) . '": ' . esc_html__( 'Missing or incorrect information', 'bookingcom-official-searchbox' ) . '<br>';
-                } //$valid[ trim( $field[ 0 ] ) ] != trim( $input[ $field[ 0 ] ] )
-            }
-        } //if ( $field[ 1 ] == 'text' )
-        elseif ( $field[ 1 ] == 'number' ) {
-            if ( $field[ 0 ] == 'widget_width' ) {
-                $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                if ( !empty( $input[ $field[ 0 ] ] ) && $input[ $field[ 0 ] ] != '' && !is_numeric( $input[ $field[ 0 ] ] ) ) {
-                    $error      = true;
-                    $message[ ] = '"' . esc_html($field[ 2 ]) . '": ' . esc_html__( 'needs to be an integer', 'bookingcom-official-searchbox' ) . '<br>';
-                } //!empty( $input[ $field[ 0 ] ] ) && $input[ $field[ 0 ] ] != '' && !is_numeric( $input[ $field[ 0 ] ] )
-            } //$field[ 0 ] == 'widget_width'
-            if ( $field[ 0 ] == 'aid' ) {
-                $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                if ( !empty( $input[ $field[ 0 ] ] ) && $input[ $field[ 0 ] ] != '' && !is_numeric( $input[ $field[ 0 ] ] ) ) {
-                    $error      = true;
-                    $message[ ] = '"' . esc_html($field[ 2 ]) . '": ' . esc_html__( 'needs to be an integer', 'bookingcom-official-searchbox' ) . '<br>';
-                } //!empty( $input[ $field[ 0 ] ] ) && $input[ $field[ 0 ] ] != '' && !is_numeric( $input[ $field[ 0 ] ] )
-                // Check if user is placing correct affiliate ID and not partner ID
-                else if ( !empty( $input[ $field[ 0 ] ] ) && is_numeric( $input[ $field[ 0 ] ] ) ) {
-                    $input[ $field[ 0 ] ] = strval( $input[ $field[ 0 ] ] );
-                    if ( $input[ $field[ 0 ] ][ 0 ] == '4' ) { // check first number of the converted value into a string 
-                        $error      = true;
-                        $message[ ] = '"' . esc_html($field[ 2 ]) . '": ' . esc_html__( 'Affiliate ID is different from partner ID: should start with a 1, 3, 8 or 9. Please change it.', 'bookingcom-official-searchbox' ) . '<br>';
-                    } //$input[ $field[ 0 ] ][ 0 ] == '4'
-                } //!empty( $input[ $field[ 0 ] ] ) && is_numeric( $input[ $field[ 0 ] ] )
-            } //$field[ 0 ] == 'aid'
+    $valid = array();
+
+    if (isset($input['display_in_custom_post_types']) && !empty($input['display_in_custom_post_types'])) {
+        if (preg_match( '/^[a-zA-Z0-9-_,]+$/', $input['display_in_custom_post_types'] )) {
+            $valid['display_in_custom_post_types'] = sanitize_text_field($input['display_in_custom_post_types']);
+        } else {
+            add_settings_error( 'bos_searchbox_user_options', //setting
+                'bos_searchbox_display_in_custom_post_types_error', //code added to tag #id            
+                'Custom Post Type: ' . esc_html__( 'Use only alphanumeric strings and commas for multiple slugs', 'bookingcom-official-searchbox' ) . '<br>',
+                'error'
+            );
         }
-        elseif ( $field[ 1 ] == 'radio' ) {
-            if ( $field[ 0 ] == 'month_format' ) {
-                switch ( $input[ $field[ 0 ] ] ) {
-                    case 'short':
-                        $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                        break;
-                    case 'long':
-                    default:
-                        $valid[ $field[ 0 ] ] = 'long'; //default : long
-                        break;
-                } //$input[ $field[ 0 ] ]
-            } //$field[ 0 ] == 'month_format'
-            if ( $field[ 0 ] == 'logodim' ) {
-                switch ( $input[ $field[ 0 ] ] ) {
-                    case 'blue_200x33':
-                    case 'blue_300x50':
-                    case 'white_150x25':
-                    case 'white_200x33':
-                    case 'white_300x50':
-                        $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                        break;
-                    case 'blue_150x25':
-                    default:
-                        $valid[ $field[ 0 ] ] = 'blue_150x25'; //default : blue_150x25
-                        break;
-                }
-            }        
+    }
+
+    if (isset($input['cname'])) {
+        if (!empty($input['cname'])) {
+            if (preg_match( '/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-_]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$/', $input['cname'] )) {
+                $valid['cname'] = sanitize_text_field($input['cname']);
+            } else {
+                add_settings_error( 'bos_searchbox_user_options', //setting
+                    'bos_searchbox_cname_error', //code added to tag #id            
+                    'Cname: ' . esc_html__( 'Cname format is incorrect', 'bookingcom-official-searchbox' ) . '<br>',
+                    'error'
+                );
+            }
         }
-        elseif ( $field[ 1 ] == 'checkbox' ) {
-            if ( $field[ 0 ] == 'calendar' ) {
-                            $valid[ $field[ 0 ] ] = empty( $input[ $field[ 0 ] ] ) ? 0 : 1;
-            }
-            if ( $field[ 0 ] == 'flexible_dates' ) {
-                            $valid[ $field[ 0 ] ] = empty( $input[ $field[ 0 ] ] ) ? 0 : 1;
-            } 
+    }
+
+    if (isset($input['widget_width'])) {
+        $valid['widget_width'] = sanitize_text_field($input['widget_width']);
+    }
+
+    if (isset($input['aid']) && !empty($input['aid']) && is_numeric($input['aid'])) {
+        if ( !preg_match( '/^(?:4|7)\d+$/', $input['aid'] ) ) {
+            $valid['aid'] = sanitize_text_field($input['aid']);
+        } else {
+            add_settings_error( 'bos_searchbox_user_options', //setting
+                'bos_searchbox_display_aid_match_error', //code added to tag #id
+                'Affiliate ID: ' . esc_html__( 'Affiliate ID is different from partner ID: should start with a 1, 3, 8 or 9. Please change it.', 'bookingcom-official-searchbox' ) . '<br>',
+                'error'
+            );
         }
-        else {
-            if ( $field[ 0 ] == 'buttonpos' ) {
-                switch ( $input[ $field[ 0 ] ] ) {
-                    case 'center':
-                    case 'left':
-                        $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                        break;
-                    case 'right':
-                    default:
-                        $valid[ $field[ 0 ] ] = 'right'; //default : right
-                        break;
-                } //$input[ $field[ 0 ] ]
-            } //$field[ 0 ] == 'buttonpos'
-            elseif ( $field[ 0 ] == 'logopos' ) {
-                switch ( $input[ $field[ 0 ] ] ) {
-                    case 'center':
-                    case 'right':
-                        $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                        break;
-                    case 'left':
-                    default:
-                        $valid[ $field[ 0 ] ] = 'left'; //default : left
-                        break;
-                } //$input[ $field[ 0 ] ]
-            } //$field[ 0 ] == 'logopos'
-            elseif ( $field[ 0 ] == 'widget_width_suffix' ) {
-                switch ( $input[ $field[ 0 ] ] ) {
-                    case '%':
-                        $valid[ $field[ 0 ] ] = '%';
-                        break;
-                    case 'px':
-                    default:
-                        $valid[ $field[ 0 ] ] = 'px'; //default : px
-                        break;
-                }
-            }
-            else {
-                switch ( $input[ $field[ 0 ] ] ) {
-                    case 'city':
-                    case 'region':
-                    case 'district':
-                    case 'landmark':
-                        $valid[ $field[ 0 ] ] = $input[ $field[ 0 ] ];
-                        break;
-                    case 'select':
-                    default:
-                        $valid[ $field[ 0 ] ] = 'select'; //default : select
-                        break;
-                } //$input[ $field[ 0 ] ]
-            }
-        } //logopos entries      
-    } //foreach( $arrayFields as $field)
-    if ( $error ) {
-        add_settings_error( 'bos_searchbox_user_options', //setting
-            'bos_searchbox_texterror', //code added to tag #id            
-            implode( '', $message ), 'error'
-        );
-    } //$error
+    }
+
+    if (isset($input['fields_border_radius']) && !empty($input['fields_border_radius']) && is_numeric($input['fields_border_radius'])) {
+        if ( !empty($input['fields_border_radius']) ) {
+            $valid['fields_border_radius'] = sanitize_text_field($input['fields_border_radius']);
+        } else {
+            add_settings_error( 'bos_searchbox_user_options', //setting
+                'bos_searchbox_fields_border_radius_error', //code added to tag #id
+                'Border radius: ' . esc_html__( 'Border radius should contain a number.', 'bookingcom-official-searchbox' ) . '<br>',
+                'error'
+            );
+        }
+    }
+
+    if (isset($input['sb_border_radius']) && !empty($input['sb_border_radius']) && is_numeric($input['sb_border_radius'])) {
+        if ( !empty($input['sb_border_radius']) ) {
+            $valid['sb_border_radius'] = sanitize_text_field($input['sb_border_radius']);
+        } else {
+            add_settings_error( 'bos_searchbox_user_options', //setting
+                'bos_searchbox_sb_border_radius_error', //code added to tag #id
+                'Searchbox Border radius: ' . esc_html__( 'Searchbox Border radius should contain a number.', 'bookingcom-official-searchbox' ) . '<br>',
+                'error'
+            );
+        }
+    }
+
+    if (isset($input['month_format'])) {
+        switch ( $input['month_format'] ) {
+            case 'short':
+                $valid['month_format'] = $input['month_format'];
+                break;
+            case 'long':
+            default:
+                $valid['month_format'] = 'long';
+                break;
+        }
+    }
+
+    if (isset($input['logodim'])) {
+        switch ( $input['logodim'] ) {
+            case 'blue_200x33':
+            case 'blue_300x50':
+            case 'white_150x25':
+            case 'white_200x33':
+            case 'white_300x50':
+                $valid['logodim'] = $input['logodim'];
+                break;
+            case 'blue_150x25':
+            default:
+                $valid['logodim'] = 'blue_150x25'; //default : blue_150x25
+                break;
+        }
+    }
+
+    if (isset($input['logo_enabled'])) {
+        $valid['logo_enabled'] = empty($input['logo_enabled']) ? 0 : 1;
+    }
+
+    if (isset($input['buttonpos'])) {
+        switch ( $input['buttonpos'] ) {
+            case 'center':
+            case 'left':
+                $valid['buttonpos'] = $input['buttonpos'];
+                break;
+            case 'right':
+            default:
+                $valid['buttonpos'] = 'right'; //default : right
+                break;
+        }
+    }
+
+    if (isset($input['logopos'])) {
+        switch ( $input['logopos'] ) {
+            case 'center':
+            case 'right':
+                $valid['logopos'] = $input['logopos'];
+                break;
+            case 'left':
+            default:
+                $valid['logopos'] = 'left'; //default : left
+                break;
+        }
+    }
+
+    if (isset($input['destination'])) {
+        $valid['destination'] = sanitize_text_field($input['destination']);
+    }
+
+    if (isset($input['dest_type'])) {
+        switch ( $input['dest_type'] ) {
+            case 'city':
+            case 'region':
+            case 'district':
+            case 'landmark':
+                $valid['dest_type'] = $input['dest_type'];
+                break;
+            case 'select':
+            default:
+                $valid['dest_type'] = 'select'; //default : select
+                break;
+        }
+    }
+
+    if (isset($input['dest_id'])) {
+        $valid['dest_id'] = sanitize_text_field($input['dest_id']);
+    }
+
+    if (isset($input['bgcolor']) && !empty($input['bgcolor'])) {
+        $valid['bgcolor'] = sanitize_text_field($input['bgcolor']);
+    }
+    if (isset($input['headline_textcolor']) && !empty($input['headline_textcolor'])) {
+        $valid['headline_textcolor'] = sanitize_text_field($input['headline_textcolor']);
+    }
+    if (isset($input['textcolor']) && !empty($input['textcolor'])) {
+        $valid['textcolor'] = sanitize_text_field($input['textcolor']);
+    }
+    if (isset($input['dest_textcolor']) && !empty($input['dest_textcolor'])) {
+        $valid['dest_textcolor'] = sanitize_text_field($input['dest_textcolor']);
+    }
+    if (isset($input['dest_bgcolor']) && !empty($input['dest_bgcolor'])) {
+        $valid['dest_bgcolor'] = sanitize_text_field($input['dest_bgcolor']);
+    }
+    if (isset($input['flexdate_textcolor']) && !empty($input['flexdate_textcolor'])) {
+        $valid['flexdate_textcolor'] = sanitize_text_field($input['flexdate_textcolor']);
+    }
+    if (isset($input['date_bgcolor']) && !empty($input['date_bgcolor'])) {
+        $valid['date_bgcolor'] = sanitize_text_field($input['date_bgcolor']);
+    }
+    if (isset($input['date_textcolor']) && !empty($input['date_textcolor'])) {
+        $valid['date_textcolor'] = sanitize_text_field($input['date_textcolor']);
+    }
+    if (isset($input['submit_bgcolor']) && !empty($input['submit_bgcolor'])) {
+        $valid['submit_bgcolor'] = sanitize_text_field($input['submit_bgcolor']);
+    }
+    if (isset($input['submit_bordercolor']) && !empty($input['submit_bordercolor'])) {
+        $valid['submit_bordercolor'] = sanitize_text_field($input['submit_bordercolor']);
+    }
+    if (isset($input['submit_textcolor']) && !empty($input['submit_textcolor'])) {
+        $valid['submit_textcolor'] = sanitize_text_field($input['submit_textcolor']);
+    }
+    if (isset($input['calendar_selected_bgcolor']) && !empty($input['calendar_selected_bgcolor'])) {
+        $valid['calendar_selected_bgcolor'] = sanitize_text_field($input['calendar_selected_bgcolor']);
+    }
+    if (isset($input['calendar_selected_textcolor']) && !empty($input['calendar_selected_textcolor'])) {
+        $valid['calendar_selected_textcolor'] = sanitize_text_field($input['calendar_selected_textcolor']);
+    }
+    if (isset($input['calendar_daynames_color']) && !empty($input['calendar_daynames_color'])) {
+        $valid['calendar_daynames_color'] = sanitize_text_field($input['calendar_daynames_color']);
+    }
+
+
+    if (isset($input['flexible_dates'])) {
+        $valid['flexible_dates'] = empty($input['flexible_dates']) ? 0 : 1;
+    }
+
+    if (isset($input['show_weeknumbers'])) {
+        $valid['show_weeknumbers'] = empty($input['show_weeknumbers']) ? 0 : 1;
+    }
+
+    
+    if (isset($input['headline_textsize']) && is_numeric($input['headline_textsize'])) {
+        $valid['headline_textsize'] = sanitize_text_field($input['headline_textsize']);
+    }
+    if (isset($input['maintitle'])) {
+        $valid['maintitle'] = sanitize_text_field($input['maintitle']);
+    }
+    if (isset($input['dest_title'])) {
+        $valid['dest_title'] = sanitize_text_field($input['dest_title']);
+    }
+    if (isset($input['checkin'])) {
+        $valid['checkin'] = sanitize_text_field($input['checkin']);
+    }
+    if (isset($input['checkout'])) {
+        $valid['checkout'] = sanitize_text_field($input['checkout']);
+    }
+    if (isset($input['submit'])) {
+        $valid['submit'] = sanitize_text_field($input['submit']);
+    }
+
     return $valid;
 }
+
+function dynamic_bos_css() {
+    $bos_options = bos_searchbox_retrieve_all_user_options();
+    
+    if ($bos_options && count($bos_options)) {
+        $custom_css = '.daterangepicker.bos-css th.month, .daterangepicker.bos-css .calendar-table th:not(.week) {color: ' .$bos_options['calendar_daynames_color']. ';}';
+
+        $custom_css .= '.daterangepicker.bos-css td.in-range { background-color: #1a1a1a0f; }';
+
+        $custom_css .= '.daterangepicker.bos-css td.active, .daterangepicker.bos-css td.active:hover { background-color: ' .$bos_options['calendar_selected_bgcolor']. ';}';
+
+        $custom_css .= '.daterangepicker.bos-css td.off, .daterangepicker.bos-css td.off.in-range, .daterangepicker.bos-css td.off.start-date, .daterangepicker.bos-css td.off.end-date { background-color: #FFF; }';
+
+        $css_file_path = BOS_PLUGIN_MAIN_PATH . '/assets/css/bos_dynamic.css';
+
+        file_put_contents($css_file_path, $custom_css);
+    }
+}
+
 
 add_action( 'wp_ajax_bos_preview', 'bos_ajax_preview' );
 function bos_ajax_preview( ) {
     if ( isset( $_REQUEST[ 'nonce' ] ) ) {
         // Verify that the incoming request is coming with the security nonce
         if ( wp_verify_nonce( $_REQUEST[ 'nonce' ], 'bos_ajax_nonce' ) ) {
+            $options_array = get_option('bos_searchbox_user_options');
             $arrayFields = bos_searchbox_settings_fields_array();
             foreach ( $arrayFields as $field ) {
-                // print_r($field[1]);
                 if ( $field[ 1 ] == 'text' || $field[ 1 ] == 'number' || $field[ 1 ] == 'radio' || $field[ 1 ] == 'select' ) {
                     $options[ $field[ 0 ] ] = isset( $_REQUEST[ $field[ 0 ] ] ) ? stripslashes( sanitize_text_field( $_REQUEST[ $field[ 0 ] ] ) ) : '';
                 } //if ( $field[ 1 ] == 'text' )
                 elseif ( $field[ 1 ] == 'checkbox' ) {
-                    if ( $field[ 0 ] == 'calendar' ) {
-                        $options[ $field[ 0 ] ] = empty( $_REQUEST[ 'calendar' ] ) ? 0 : 1;
-                    } //if ( $field[ 0 ] == 'calendar' )
                     if ( $field[ 0 ] == 'flexible_dates' ) {
                         $options[ $field[ 0 ] ] = empty( $_REQUEST[ 'flexible_dates' ] ) ? 0 : 1;
-                    } //if ( $field[ 0 ] == 'flexible_dates' )
+                    }//if ( $field[ 0 ] == 'flexible_dates' )
+                    elseif ( $field[ 0 ] == 'show_weeknumbers' ) {
+                        $options[ $field[ 0 ] ] = empty( $_REQUEST[ 'show_weeknumbers' ]) ? 0 : 1;
+                    }//$field[ 0 ] == 'show_weeknumbers'
                 } //$field[ 1 ] == 'checkbox'
+                elseif ( $field[ 1 ] == 'switch' ) {
+                    if ( $field[ 0 ] == 'logo_enabled' ) {
+                        $options[ $field[ 0 ] ] = empty( $_REQUEST[ 'logo_enabled' ] ) ? 0 : 1;
+                    } //if ( $field[ 0 ] == 'logo_enabled' )
+                } //$field[ 1 ] == 'switch'
             } //foreach( $arrayFields as $field)
+
             $preview = true;
             echo '<div id="bos_preview_title"><img src="' . esc_attr(BOS_PLUGIN_ASSETS) . '/images/preview_title.png" alt="Preview" /></div>';
             bos_create_searchbox( $options, $preview );

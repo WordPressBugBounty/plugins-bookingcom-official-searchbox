@@ -55,15 +55,15 @@ if ( ! function_exists( 'bos_mb_create' ) ) :
         echo __( 'Use the following fields to select a location for your Booking.com search box widget for this specific post or page', 'bookingcom-official-searchbox' );
         $bos_mb_dest_placeholder = '';
         if ( empty( $bos_mb_destination ) || $bos_mb_destination == ' ' || $bos_mb_destination == '' ) {
-            $bos_mb_dest_placeholder = ' placeholder="' . esc_html__( 'e.g. Amsterdam', 'bookingcom-official-searchbox' ) . '" ';
+            $bos_mb_dest_placeholder = esc_html__( 'e.g. Amsterdam', 'bookingcom-official-searchbox' );
         } //empty( $bos_mb_destination ) || $bos_mb_destination == ' ' || $bos_mb_destination == ''
-        $bos_mb_label_style = 'style="font-weight: bold;margin-right: 5px; display: inline-block;"';
+        $bos_mb_label_style = "font-weight: bold;margin-right: 5px; display: inline-block;";
         // Destination   
-        echo '<p class="bos_mb_p"><label for="bos_mb_destination" ' . esc_attr($bos_mb_label_style) . '>' . esc_html__( 'Destination', 'bookingcom-official-searchbox' ) . '</label>';
-        echo '&nbsp;<input style="width: 350px;" class="bos_mb_field bos_mb_text" type="text" name="bos_mb_destination" value="' . esc_attr( trim( $bos_mb_destination ) ) . '" ' . esc_attr($bos_mb_dest_placeholder) . '>';
+        echo '<p class="bos_mb_p"><label for="bos_mb_destination" style="' . esc_attr($bos_mb_label_style) . '">' . esc_html__( 'Destination', 'bookingcom-official-searchbox' ) . '</label>';
+        echo '&nbsp;<input style="width: 350px;" class="bos_mb_field bos_mb_text" type="text" name="bos_mb_destination" value="' . esc_attr( trim( $bos_mb_destination ) ) . '" placeholder="' . esc_attr($bos_mb_dest_placeholder) . '">';
         echo '</p>';
         // Destination type
-        echo '<p class="bos_mb_p"><label for="bos_mb_dest_type" ' . esc_attr($bos_mb_label_style) . '>' . esc_html__( 'Destination type', 'bookingcom-official-searchbox' ) . '</label>';
+        echo '<p class="bos_mb_p"><label for="bos_mb_dest_type" style="' . esc_attr($bos_mb_label_style) . '">' . esc_html__( 'Destination type', 'bookingcom-official-searchbox' ) . '</label>';
         echo '&nbsp;<select class="bos_mb_field bos_mb_select" name="bos_mb_dest_type" >';
         echo '<option value="select" ' . selected( 'select', $bos_mb_dest_type, false ) . ' >' . esc_html__( 'select...', 'bookingcom-official-searchbox' ) . '</option>';
         echo '<option value="city" ' . selected( 'city', $bos_mb_dest_type, false ) . ' >' . esc_html__( 'city', 'bookingcom-official-searchbox' ) . '</option>';
@@ -75,10 +75,10 @@ if ( ! function_exists( 'bos_mb_create' ) ) :
         // Destination id
         $bos_mb_dest_id_placeholder = '';
         if ( empty( $bos_mb_dest_id ) || $bos_mb_dest_id == ' ' || $bos_mb_dest_id == '' ) {
-                        $bos_mb_dest_id_placeholder = ' placeholder="' . esc_html__( 'e.g. -2140479 for Amsterdam', 'bookingcom-official-searchbox' ) . '" ';
+                        $bos_mb_dest_id_placeholder = esc_html__( 'e.g. -2140479 for Amsterdam', 'bookingcom-official-searchbox' );
         } //empty( $bos_mb_dest_id ) || $bos_mb_dest_id == ' ' || $bos_mb_dest_id == ''
-        echo '<p class="bos_mb_p"><label for="bos_mb_dest_id" ' . esc_attr($bos_mb_label_style) . '">' . esc_html__( 'Destination ID ( e.g. -2140479 for Amsterdam )', 'bookingcom-official-searchbox' ) . '</label>';
-        echo '&nbsp;<input  style="width: 200px;"  class="bos_mb_field bos_mb_text" type="text" name="bos_mb_dest_id" value="' . esc_attr( trim( $bos_mb_dest_id ) ) . '" ' . esc_attr($bos_mb_dest_id_placeholder) . '>&nbsp;' . wp_kses_post($bos_mb_info_icon);
+        echo '<p class="bos_mb_p"><label for="bos_mb_dest_id" style="' . esc_attr($bos_mb_label_style) . '">' . esc_html__( 'Destination ID ( e.g. -2140479 for Amsterdam )', 'bookingcom-official-searchbox' ) . '</label>';
+        echo '&nbsp;<input  style="width: 200px;"  class="bos_mb_field bos_mb_text" type="text" name="bos_mb_dest_id" value="' . esc_attr( trim( $bos_mb_dest_id ) ) . '" placeholder="' . esc_attr($bos_mb_dest_id_placeholder) . '">&nbsp;' . wp_kses_post($bos_mb_info_icon);
         echo '</p>';
         echo '<div id="bos_mb_info_box" style="display: none;padding: 1em; background-color:#FFFFE0;border:1px solid  #E6DB55; margin:10px 0 10px;">';
         echo wp_kses_post( __( 'For more info on your destination ID, login to the <a href="https://admin.booking.com/partner/" target="_blank">Partner Center</a>. Check <em>&quot;URL constructor&quot;</em> section to find your destination ID. These IDs, also known as UFIs, are usually a negative number ( e.g. <strong>-2140479 is for Amsterdam</strong> , but can be positive ones in the US ) while regions, district and landmarks are always positive ( e.g. <strong>1408 is for Ibiza</strong> ).', 'bookingcom-official-searchbox' ) );

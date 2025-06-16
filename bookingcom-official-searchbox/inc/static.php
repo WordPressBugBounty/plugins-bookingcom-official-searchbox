@@ -25,6 +25,12 @@ if ( ! function_exists( 'bos_register_scripts' ) ) :
             ],
             'jquery-ui' => [
                 'src' => BOS_PLUGIN_ASSETS . '/css/jquery-ui.css',
+            ],
+            'bos-date-range-picker-style' => [
+                'src' => BOS_PLUGIN_ASSETS . '/css/daterangepicker.css',
+            ],
+            'bos-dynamic_style' => [
+                'src' => BOS_PLUGIN_ASSETS . '/css/bos_dynamic.css',
             ]
 		];
 
@@ -38,6 +44,11 @@ if ( ! function_exists( 'bos_register_scripts' ) ) :
 				'deps'      => [ 'jquery' ],
 				'in_footer' => true,
 			],
+            'bos-date-range-picker' => [
+                'src'       => BOS_PLUGIN_ASSETS . '/js/daterangepicker.js',
+                'deps'      => [ 'jquery' ],
+                'in_footer' => true
+            ],
 			'bos-date' => [
 				'src'       => BOS_PLUGIN_ASSETS . '/js/bos_date.js',
 				'deps'      => [ 'jquery' ],
@@ -69,64 +80,50 @@ if ( ! function_exists( 'bos_enqueue_scripts' ) ) :
 
         bos_register_scripts();
 
+        dynamic_bos_css();
+
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_style( 'bos-searchbox' );
         if (is_admin()) {
             wp_enqueue_style( 'bos-settings' );
         }
         wp_enqueue_style( 'jquery-ui' );
+        wp_enqueue_style( 'bos-date-range-picker-style' );
+        wp_enqueue_style( 'bos-dynamic_style' );
 
         wp_enqueue_script( 'jquery' );
+        wp_enqueue_script( 'bos-moment' );
         wp_enqueue_script( 'bos-main' );
+        wp_enqueue_script( 'bos-date-range-picker' );
         wp_enqueue_script( 'bos-date' );
         if (is_admin()) {
             wp_enqueue_script( 'bos-general' );
         }
-        wp_enqueue_script( 'bos-moment' );
         wp_enqueue_script( 'wp-color-picker' );
-        wp_enqueue_script( 'jquery-ui-datepicker' );
 
         $options = bos_searchbox_retrieve_all_user_options();
 
         wp_localize_script( 'bos-date', 'objectL10n', array(
             'destinationErrorMsg' => esc_html__( 'Sorry, we need at least part of the name to start searching.', 'bookingcom-official-searchbox' ),
-            'tooManyDays' => esc_html__( 'Your check-out date is more than 30 nights after your check-in date. Bookings can only be made for a maximum period of 30 nights. Please enter alternative dates and try again.', 'bookingcom-official-searchbox' ),
-            'dateInThePast' => esc_html__( 'Your check-in date is in the past. Please check your dates and try again.', 'bookingcom-official-searchbox' ),
-            'cObeforeCI' => esc_html__( 'Please check your dates, the check-out date appears to be earlier than the check-in date.', 'bookingcom-official-searchbox' ),
-            'calendar_nextMonth' => esc_html__( 'Next month', 'bookingcom-official-searchbox' ),
-            'calendar_open' => esc_html__( 'Open calendar and pick a date', 'bookingcom-official-searchbox' ) ,
-            'calendar_prevMonth' => esc_html__( 'Prev month', 'bookingcom-official-searchbox' ),
-            'calendar_closeCalendar' => esc_html__( 'Close calendar', 'bookingcom-official-searchbox' ),
-            'january' => esc_html__( 'January', 'bookingcom-official-searchbox' ),
-            'february' => esc_html__( 'February', 'bookingcom-official-searchbox' ),
-            'march' => esc_html__( 'March', 'bookingcom-official-searchbox' ),
-            'april' => esc_html__( 'April', 'bookingcom-official-searchbox' ),
-            'may' => esc_html__( 'May', 'bookingcom-official-searchbox' ),
-            'june' => esc_html__( 'June', 'bookingcom-official-searchbox' ),
-            'july' => esc_html__( 'July', 'bookingcom-official-searchbox' ),
-            'august' => esc_html__( 'August', 'bookingcom-official-searchbox' ),
-            'september' => esc_html__( 'September', 'bookingcom-official-searchbox' ),
-            'october' => esc_html__( 'October', 'bookingcom-official-searchbox' ),
-            'november' => esc_html__( 'November', 'bookingcom-official-searchbox' ),
-            'december' => esc_html__( 'December', 'bookingcom-official-searchbox' ),
-            'mo' => esc_html__( 'Mo', 'bookingcom-official-searchbox' ),
-            'tu' => esc_html__( 'Tu', 'bookingcom-official-searchbox' ),
-            'we' => esc_html__( 'We', 'bookingcom-official-searchbox' ),
-            'th' => esc_html__( 'Th', 'bookingcom-official-searchbox' ),
-            'fr' => esc_html__( 'Fr', 'bookingcom-official-searchbox' ),
-            'sa' => esc_html__( 'Sa', 'bookingcom-official-searchbox' ),
-            'su' => esc_html__( 'Su', 'bookingcom-official-searchbox' ),
             'updating' => esc_html__( 'Updating...', 'bookingcom-official-searchbox' ),
             'close' => esc_html__( 'Close', 'bookingcom-official-searchbox' ),
             'placeholder' => esc_html__( 'e.g. city, region, district or specific hotel', 'bookingcom-official-searchbox' ),
+            'noSpecificDate' => esc_html__( ' I don\'t have specific dates yet ', 'bookingcom-official-searchbox' ),
             'language' => get_locale(),
             // following values are when reset to default values is triggered
+            'main_title' => __( 'Search hotels and more...', 'bookingcom-official-searchbox' ),
+            'dest_title' => __( 'Destination', 'bookingcom-official-searchbox' ),
+            'checkin_title' => __( 'Check-in date', 'bookingcom-official-searchbox' ),
+            'checkout_title' => __( 'Check-out date', 'bookingcom-official-searchbox' ),
+            'submit_title' => __( 'Search', 'bookingcom-official-searchbox' ),
             'aid' => BOS_DEFAULT_AID,
             'dest_type' => BOS_DEST_TYPE,
-            'calendar' => BOS_CALENDAR,
             'flexible_dates' => BOS_FLEXIBLE_DATES,
+            'logo_enabled' =>  BOS_LOGO_ENABLED,
             'logodim' => BOS_LOGODIM,
             'logopos' => BOS_LOGOPOS,
+            'fields_border_radius' => BOS_FIELDS_BORDER_RADIUS,
+            'sb_border_radius' => BOS_SB_BORDER_RADIUS,
             //'prot' => BOS_PROTOCOL,
             'buttonpos' => BOS_BUTTONPOS,
             //'sticky' => BOS_STICKY,
@@ -143,12 +140,18 @@ if ( ! function_exists( 'bos_enqueue_scripts' ) ) :
             'submit_bgcolor' => BOS_SUBMIT_BGCOLOR,
             'submit_bordercolor' => BOS_SUBMIT_BORDERCOLOR,
             'submit_textcolor' => BOS_SUBMIT_TEXTCOLOR,
+            'is_light_color' => !empty($options[ 'dest_textcolor' ]) && wc_hex_is_light($options[ 'dest_textcolor' ]),
+            'show_weeknumbers' => BOS_SHOW_WEEKNUMBERS,
             'calendar_selected_bgcolor' => !empty( $options[ 'calendar_selected_bgcolor' ] ) ? $options[ 'calendar_selected_bgcolor' ] : BOS_CALENDAR_SELECTED_DATE_BGCOLOR,
             'calendar_selected_textcolor' => !empty( $options[ 'calendar_selected_textcolor' ] ) ? $options[ 'calendar_selected_textcolor' ] : BOS_CALENDAR_SELECTED_DATE_TEXTCOLOR,
             'calendar_daynames_color' => !empty( $options[ 'calendar_daynames_color' ] ) ? $options[ 'calendar_daynames_color' ] : BOS_CALENDAR_DAYNAMES_COLOR,
             'aid_starts_with_four' => esc_html__( 'Affiliate ID is different from partner ID: should start with a 1, 3, 8 or 9. Please change it.', 'bookingcom-official-searchbox' ),
             //set the path for javascript files
-            'images_js_path' => BOS_PLUGIN_ASSETS . '/images' //path for images to be called from javascript     
+            // 'destination' => get_post_meta();
+            'images_js_path' => BOS_PLUGIN_ASSETS . '/images', //path for images to be called from javascript   
+            'target_path' => !empty( $options[ 'target_page' ] ) ? $options[ 'target_page' ] : BOS_TARGET_PAGE,
+            "domain"      => !empty( $options[ 'cname' ] ) ? '//' . $options[ 'cname' ] . '/' : BOS_DEFAULT_DOMAIN,
+            "settings" => get_option( 'bos_searchbox_user_options' )
         ) );
 
         // do_action('wp_enqueue_scripts')

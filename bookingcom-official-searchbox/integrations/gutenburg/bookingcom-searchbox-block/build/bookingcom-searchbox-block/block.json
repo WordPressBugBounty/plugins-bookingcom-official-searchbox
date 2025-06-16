@@ -1,0 +1,119 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "create-block/bookingcom-searchbox-block",
+  "version": "0.1.0",
+  "title": "Bookingcom Searchbox Block",
+  "category": "widgets",
+  "icon": "smiley",
+  "description": "Booking.com Searchbox Gutenberg Widget.",
+  "example": {},
+  "attributes": {
+    "headLineSize": {
+      "type": "number"
+    },
+    "sbTitle": {
+      "type": "string"
+    },
+    "destTitle": {
+      "type": "string"
+    },
+    "checkinTitle": {
+      "type": "string"
+    },
+    "checkoutTitle": {
+      "type": "string"
+    },
+    "submitTitle": {
+      "type": "string"
+    },
+    "enableLogo": {
+      "type": "boolean"
+    },
+    "logoPos": {
+      "type": "string"
+    },
+    "submitPos": {
+      "type": "string"
+    },
+    "sbBgColor": {
+      "type": "string"
+    },
+    "headlineTextColor": {
+      "type": "string"
+    },
+    "textColor": {
+      "type": "string"
+    },
+    "destTextColor": {
+      "type": "string"
+    },
+    "destBgColor": {
+      "type": "string"
+    },
+    "flexDateTextColor": {
+      "type": "string"
+    },
+    "dateBgColor": {
+      "type": "string"
+    },
+    "dateTextColor": {
+      "type": "string"
+    },
+    "ctaBgColor": {
+      "type": "string"
+    },
+    "ctaBorderColor": {
+      "type": "string"
+    },
+    "ctaTextColor": {
+      "type": "string"
+    },
+    "calSelBgColor": {
+      "type": "string"
+    },
+    "calSelTextColor": {
+      "type": "string"
+    },
+    "calDayNamesTextColor": {
+      "type": "string"
+    },
+    "flexDates": {
+      "type": "boolean"
+    },
+    "showWeekNumbers": {
+      "type": "boolean"
+    },
+    "aid": {
+      "type": "number"
+    },
+    "width": {
+      "type": "string"
+    },
+    "logoDim": {
+      "type": "string"
+    },
+    "fieldsBorderRadius": {
+      "type": "number"
+    },
+    "sbBorderRadius": {
+      "type": "number"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "dest_type": {
+      "type": "string"
+    },
+    "dest_id": {
+      "type": "string"
+    }
+  },
+  "supports": {
+    "html": false
+  },
+  "textdomain": "bookingcom-searchbox-block",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "render": "file:./render.php"
+}

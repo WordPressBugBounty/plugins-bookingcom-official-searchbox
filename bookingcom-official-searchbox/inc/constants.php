@@ -25,6 +25,7 @@ if ( ! defined( 'BOS_PLUGIN_URL' ) ) {
     define( 'BOS_PLUGIN_URL', untrailingslashit( plugins_url( '/', BOS_PLUGIN_FILE ) ) );
 }
 
+
 if ( ! defined( 'BOS_INC_PLUGIN_DIR' ) ) {
     define( 'BOS_INC_PLUGIN_DIR', BOS_PLUGIN_PATH );
 }
@@ -38,14 +39,10 @@ if ( ! defined( 'BOS_PLUGIN_ASSETS' ) ) {
 }
 
 if ( ! defined( 'BOS_DEFAULT_AID' ) ) {
-    define( 'BOS_DEFAULT_AID', 382821 );
+    define( 'BOS_DEFAULT_AID', 304142 );
 }
 
-// Default fallback values
-if ( ! defined( 'BOS_CALENDAR' ) ) {
-    define( 'BOS_CALENDAR', 0 );
-}
-        
+// Default fallback values        
 if ( ! defined( 'BOS_DEST_TYPE' ) ) {
     define( 'BOS_DEST_TYPE', 'select' ); // destination type of settings and meta box
 }
@@ -58,6 +55,10 @@ if ( ! defined( 'BOS_FLEXIBLE_DATES' ) ) {
 // define( 'BOS_SAVE_BUTTON' , 0 ); // save button on widget ( invisible )
 // }
 
+if ( ! defined( 'BOS_LOGO_ENABLED' ) ) {
+    define( 'BOS_LOGO_ENABLED', 1 ); // booking.com logo ( enabled )
+}
+
 if ( ! defined( 'BOS_LOGODIM' ) ) {
     define( 'BOS_LOGODIM', 'blue_150x25' ); // logo dimension and color
 }
@@ -66,8 +67,20 @@ if ( ! defined( 'BOS_LOGOPOS' ) ) {
     define( 'BOS_LOGOPOS', 'left' ); // booking.com logo position
 }
 
+if ( ! defined( 'BOS_SB_BORDER_RADIUS' ) ) {
+    define( 'BOS_SB_BORDER_RADIUS', '0' );
+}
+
+if ( ! defined( 'BOS_SHOW_WEEKNUMBERS' ) ) {
+    define( 'BOS_SHOW_WEEKNUMBERS', 0 );
+}
+
 if ( ! defined( 'BOS_SELECTED_DATE_COLOR' ) ) {
     define( 'BOS_SELECTED_DATE_COLOR', '#0071c2' );
+}
+
+if ( ! defined( 'BOS_FIELDS_BORDER_RADIUS' ) ) {
+    define( 'BOS_FIELDS_BORDER_RADIUS', '0' ); // fields border radius
 }
 
 if ( ! defined( 'BOS_BUTTONPOS' ) ) {
@@ -75,7 +88,7 @@ if ( ! defined( 'BOS_BUTTONPOS' ) ) {
 }
 
 if ( ! defined( 'BOS_BGCOLOR' ) ) {
-    define( 'BOS_BGCOLOR', '' ); // searchbox background color
+    define( 'BOS_BGCOLOR', '#febb02' ); // searchbox background color
 }
 
 if ( ! defined( 'BOS_HEADLINE_SIZE' ) ) {
@@ -139,7 +152,7 @@ if ( ! defined( 'BOS_DISPLAY_IN_CUSTOM_TYPES' ) ) {
 }
 
 if ( ! defined( 'BOS_DEFAULT_DOMAIN' ) ) {
-    define( 'BOS_DEFAULT_DOMAIN', '//www.booking.com/' ); // landing page
+    define( 'BOS_DEFAULT_DOMAIN', 'https://www.booking.com/' ); // domain
 }
 
 if ( ! defined( 'BOS_TARGET_PAGE' ) ) {

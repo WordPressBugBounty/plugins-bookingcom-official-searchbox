@@ -12,6 +12,10 @@ defined( 'ABSPATH' ) || exit;
 // Include the init file.
 require_once dirname( __FILE__ ) . '/constants.php';
 
+require_once BOS_PLUGIN_PATH . '/helpers/searchbox-fields.php';
+
+require_once BOS_PLUGIN_PATH . '/helpers/bos_render_settings.php';
+
 require_once BOS_PLUGIN_PATH . '/core-functions.php';
 
 require_once BOS_PLUGIN_PATH . '/helpers.php';

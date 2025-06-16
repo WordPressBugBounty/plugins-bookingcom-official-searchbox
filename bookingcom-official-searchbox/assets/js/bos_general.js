@@ -20,6 +20,11 @@
             $('#bos_preview').append(ajax_loader);
             $('#flexi_searchbox').css('opacity', '0.5');
 
+            var checkin = moment();
+            var checkout = moment(checkin).add(1, 'd');
+            var language = objectL10n.language;
+            moment.locale(language);
+
             var data = {
 
                 action: 'bos_preview', // The function for handling the request
@@ -29,12 +34,12 @@
                 dest_id: $('#dest_id').val(),
                 dest_type: $('#dest_type').val(),
                 widget_width: $('#widget_width').val(), // widget_width
-                widget_width_suffix: $('#widget_width_suffix').val(), // widget_width_suffix
-                calendar: $('#calendar:checked').val(), // calendar
                 flexible_dates: $('#flexible_dates:checked').val(), // flexible dates
-                month_format: $('.month_format:checked').val(), // logodim
+                logo_enabled: $('#logo_enabled:checked').val(), // logo_enabled
                 logodim: $('.logodim:checked').val(), // logodim
                 logopos: $('#logopos').val(), // logopos 
+                fields_border_radius: $('#fields_border_radius').val(), // fields_border_radius
+                sb_border_radius: $('#sb_border_radius').val(), // sb_border_radius
                 preset_checkin_date: $('#preset_checkin_date').val(), // preset_checkin_date 
                 preset_checkout_date: $('#preset_checkout_date').val(), // preset_checkout_date  
                 buttonpos: $('#buttonpos').val(), // buttonpos  
@@ -57,6 +62,7 @@
                 dest_title: $('#dest_title').val(), // destination  
                 checkin: $('#checkin').val(), // checkin
                 checkout: $('#checkout').val(), // checkout
+                show_weeknumbers: $('#show_weeknumbers:checked').val(), // show week numbers
                 submit: $('#submit').val() // submit                
 
             };
@@ -65,8 +71,47 @@
 
                 $('#bos_preview').html(response);
                 $('#flexi_searchbox').css('opacity', '1');
+                var dateFormat = '';
+                if (language === 'de_DE') {
+                    dateFormat = 'ddd., D. MMM. YYYY';
+                } else {
+                    dateFormat = 'ddd, D MMM YYYY';
+                }
+                $('.b_dates_inner_wrapper div#bos-date_b_checkin').html(checkin.format(dateFormat));
+                $('#b_checkin').val(checkin.format('YYYY-MM-DD'));
+                $('.b_dates_inner_wrapper div#bos-date_b_checkout').html(checkout.format(dateFormat));
+                $('#b_checkout').val(checkout.format('YYYY-MM-DD'));
                 $('#bos_ajax_loader').empty();
-                sp.starting.defaultSettings();
+
+                function cb(checkin, checkout) {
+                    var dateFormat = '';
+                    if (language === 'de_DE') {
+                        dateFormat = 'ddd., D. MMM. YYYY';
+                    } else {
+                        dateFormat = 'ddd, D MMM YYYY';
+                    }
+                    $('.b_dates_inner_wrapper div#bos-date_b_checkin').html(checkin.format(dateFormat));
+                    $('#b_checkin').val(checkin.format('YYYY-MM-DD'));
+                    $('.b_dates_inner_wrapper div#bos-date_b_checkout').html(checkout.format(dateFormat));
+                    $('#b_checkout').val(checkout.format('YYYY-MM-DD'));
+                }
+            
+                $('#b_dates').daterangepicker({
+                    singleDatePicker: false,
+                    startDate: checkin,
+                    endDate: checkout,
+                    minDate: moment(),
+                    autoApply: true,
+                    opens: "center",
+                    showWeekNumbers: (data.show_weeknumbers === 'on' || objectL10n.show_weeknumbers == 1) ? true : false,
+                    maxSpan: {
+                        days: 30
+                    }
+                }, cb).on('show.daterangepicker', function (ev, picker) {
+                    picker.container.addClass('bos-css');                            
+                });
+            
+                cb(checkin, checkout);
             });
 
 
@@ -83,15 +128,15 @@
             $('#destination').val('');
             $('#dest_id').val('');
             $('#dest_type').val(objectL10n.dest_type);
+            $('#cname').val('');
             $('#display_in_custom_post_types').val('');
             $('#widget_width').val('');
-            $('#widget_width_suffix').val('px');
-            $('#calendar').val(objectL10n.calendar);
-            $('.month_format').val(objectL10n.month_format);
             $('#flexible_dates').val(objectL10n.flexible_dates);
             $('.logodim').val(objectL10n.logodim);
             $('#logopos').val(objectL10n.logopos);
-            //$( '#prot' ).val( objectL10n.prot ) ;
+            $('#logo_enabled').val(objectL10n.logo_enabled);
+            $('#fields_border_radius').val(objectL10n.fields_border_radius);
+            $('#sb_border_radius').val(objectL10n.sb_border_radius);
             $('#buttonpos').val(objectL10n.buttonpos);
             $('#bgcolor').val(objectL10n.bgcolor);
             $('#dest_bgcolor').val(objectL10n.dest_bgcolor);
@@ -112,6 +157,7 @@
             $('#dest_title').val('');
             $('#checkin').val('');
             $('#checkout').val('');
+            $('#show_weeknumbers').val(objectL10n.show_weeknumbers);
             $('#submit').val('');
 
         }); // $('#reset_default').click( function()*/      
@@ -122,28 +168,33 @@
             '#bgcolor,#textcolor,#dest_bgcolor,#dest_textcolor,#headline_textcolor,#date_textcolor,#date_bgcolor,#flexdate_textcolor,#submit_bgcolor,#submit_bordercolor,#submit_textcolor,#calendar_selected_bgcolor,#calendar_selected_textcolor,#calendar_daynames_color'
         ).wpColorPicker();
 
-        //show/hide
-        var item_handle = $('.bos_hide');
-        var item_arrow = 'p > span';
-        //var item_to_show =  $( '.bos_hide +  table.form-table' );
+        if ($('#logo_enabled').prop('checked')) {
+            $('.logodim_wrapper').removeClass('hidden');
+            $('.logopos_wrapper').removeClass('hidden');
+        }else {
+            $('.logodim_wrapper').addClass('hidden');
+            $('.logopos_wrapper').addClass('hidden');
+        };
 
-        item_handle.click(function() {
-            $(this).next().toggle('fast');
-            $(this).find(item_arrow).toggleClass('bos_open');
+        $("#bos_info_displayer").click(function(event) {
+            event.preventDefault();
+            $("#bos_info_box").toggle();
         });
 
-        //Pick calendar for Preset chec-in and check-out dates
-        $.datepicker.setDefaults({
-          showOn: "both",//focus,click
-          buttonImageOnly: true,
-          buttonImage: objectL10n.images_js_path + "/b_calendar_icon.jpg",
-          buttonText: objectL10n.calendar_open,
-          dayNamesMin: [ objectL10n.su, objectL10n.mo, objectL10n.tu, objectL10n.we, objectL10n.th, objectL10n.fr, objectL10n.sa ],
-          monthNames: [ objectL10n.january, objectL10n.february, objectL10n.march, objectL10n.april, objectL10n.may, objectL10n.june, objectL10n.july, objectL10n.august, objectL10n.september, objectL10n.october, objectL10n.november, objectL10n.december ]
+        $("#bos_info_displayer").on("focusout", function() {
+            setTimeout(() => {
+                $("#bos_info_box").toggle();
+            }, 300);
+        })
 
-        });
-        $( "#preset_checkin_date, #preset_checkout_date" ).datepicker({
-            dateFormat: 'yy-mm-dd'
+        $('#logo_enabled').change(function() {
+            if (this.checked) {
+                $('.logodim_wrapper').toggleClass('hidden');
+                $('.logopos_wrapper').toggleClass('hidden');
+            } else {
+                $('.logodim_wrapper').toggleClass('hidden');
+                $('.logopos_wrapper').toggleClass('hidden');
+            }
         });
         
 

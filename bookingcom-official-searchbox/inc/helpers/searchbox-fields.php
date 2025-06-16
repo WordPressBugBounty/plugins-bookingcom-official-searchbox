@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
 
     function bos_searchbox_settings_fields_array( $fields = array() ) {
-        // 'field name', 'input type',  'field label', 'field bonus expl.', 'input maxlenght', 'input size', 'required', 'which section belongs to?','placeholder'
+        // '0 field name', '1 input type',  '2 field label', '3 field bonus expl.', '4 input maxlenght', '5 input size', '6 required', '7 which section belongs to?','8 placeholder', '9 before_text', '10 after_text', '11 hint', '12 group'
         $fields[ 'aid' ] = array(
             'aid',
             'number',
@@ -21,51 +21,56 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             10,
             0,
             'main',
-            __( 'e.g.', 'bookingcom-official-searchbox' ) . ' ' . esc_attr(BOS_DEFAULT_AID) 
+            __( 'e.g.', 'bookingcom-official-searchbox' ) . ' ' . esc_attr(BOS_DEFAULT_AID),
+            '',
+            '',
+            '',
+            ''
         );
         $fields[ 'widget_width' ] = array(
             'widget_width',
-            'number',
+            'text',
             esc_html__( 'Width', 'bookingcom-official-searchbox' ),
-            esc_html__( 'Need a specific width (e.g. 150px)? You can customise the width of your search box easily - just fill in your pixel requirements. If you leave this field empty, you\'ll get default settings.', 'bookingcom-official-searchbox' ),
-            4,
-            4,
-            0,
-            'main',
-            '' 
-        );
-        $fields[ 'widget_width_suffix' ] = array(
-            'widget_width_suffix',
-            'select',
-            esc_html__( 'Widget Width Suffix (px or %)', 'bookingcom-official-searchbox' ),
-            '',
+            esc_html__( 'Need a specific width (e.g. 150px or 75%)?', 'bookingcom-official-searchbox' ),
             '',
             '',
             0,
             'main',
+            '',
+            '',
+            '',
+            '',
             ''
         );
         $fields[ 'cname' ] = array(
             'cname',
             'text',
             esc_html__( 'Cname', 'bookingcom-official-searchbox' ),
-            esc_html__( 'Set your cname if you have one. Remember to point it to www.booking.com and to inform our support team.', 'bookingcom-official-searchbox' ),
+            esc_html__( 'Set your cname if you have one. Remember to point it to www-sni.booking.com and to inform our support team.', 'bookingcom-official-searchbox' ),
             '',
             '',
             0,
             'main',
-            esc_html__( 'e.g. hotels.mydomain.com', 'bookingcom-official-searchbox' ) 
+            esc_html__( 'e.g. hotels.mydomain.com', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            ''
         );
-        $fields[ 'flexible_dates' ] = array(
-            'flexible_dates',
-            'checkbox',
-            esc_html__( 'Add a &quot;flexible-date&quot; check box', 'bookingcom-official-searchbox' ),
+        $fields[ 'logo_enabled' ] = array(
+            'logo_enabled',
+            'switch',
+            esc_html__( 'Show Booking.com Logo', 'bookingcom-official-searchbox' ),
             '',
             '',
             '',
             0,
             'main',
-            '' 
+            '',
+            'No',
+            'Yes',
+            esc_html__( 'Enable or disable the Booking logo on the searchbox.', 'bookingcom-official-searchbox' ),
+            ''
         );
         $fields[ 'logodim' ] = array(
             'logodim',
@@ -76,18 +81,11 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             '',
             0,
             'main',
-            '' 
-        );
-        $fields[ 'buttonpos' ] = array(
-            'buttonpos',
-            'select',
-            esc_html__( 'Button position', 'bookingcom-official-searchbox' ),
             '',
             '',
             '',
-            0,
-            'main',
-            '' 
+            '',
+            ''
         );
         $fields[ 'logopos' ] = array(
             'logopos',
@@ -98,31 +96,88 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             '',
             0,
             'main',
-            '' 
+            '',
+            '',
+            '',
+            '',
+            ''
         );
-
-        $fields[ 'preset_checkin_date' ] = array(
-            'preset_checkin_date',
-            'text',
-            esc_html__( 'Set check-in date', 'bookingcom-official-searchbox' ),
+        $fields[ 'buttonpos' ] = array(
+            'buttonpos',
+            'select',
+            esc_html__( 'Button position', 'bookingcom-official-searchbox' ),
             '',
             '',
             '',
             0,
             'main',
-            'ex. 01/15/2019' 
+            '',
+            '',
+            '',
+            '',
+            ''
+        );
+        $fields[ 'fields_border_radius' ] = array(
+            'fields_border_radius',
+            'number',
+            esc_html__( 'Border radius', 'bookingcom-official-searchbox' ),
+            esc_html__( 'This will be the border radius for any field or button.', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            'main',
+            '',
+            '',
+            '',
+            '',
+            ''
+        );
+        $fields[ 'sb_border_radius' ] = array(
+            'sb_border_radius',
+            'number',
+            esc_html__( 'Searchbox Border radius', 'bookingcom-official-searchbox' ),
+            esc_html__( 'This will be the border radius for the searchbox.', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            'main',
+            '',
+            '',
+            '',
+            '',
+            ''
         );
 
-        $fields[ 'preset_checkout_date' ] = array(
-            'preset_checkout_date',
-            'text',
-            esc_html__( 'Set check-out date', 'bookingcom-official-searchbox' ),
+        
+        $fields[ 'flexible_dates' ] = array(
+            'flexible_dates',
+            'checkbox',
+            esc_html__( 'Add a &quot;flexible-date&quot; check box', 'bookingcom-official-searchbox' ),
             '',
             '',
             '',
             0,
-            'main',
-            'ex. 02/15/2019' 
+            'calendar',
+            '',
+            '',
+            '',
+            '',
+            ''
+        );
+        $fields[ 'show_weeknumbers' ] = array(
+            'show_weeknumbers',
+            'checkbox',
+            esc_html__( 'Show weeknumbers in the calendar', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            0,
+            'calendar',
+            '',
+            '',
+            '',
+            '',
+            ''
         );
 
 
@@ -135,7 +190,11 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             18,
             0,
             'destination',
-            esc_html__( 'e.g. Amsterdam', 'bookingcom-official-searchbox' ) 
+            esc_html__( 'e.g. Amsterdam', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            ''
         );
         $fields[ 'dest_type' ] = array(
             'dest_type',
@@ -146,7 +205,11 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             '',
             0,
             'destination',
-            '' 
+            '',
+            '',
+            '',
+            '',
+            ''
         );
         $fields[ 'dest_id' ] = array(
             'dest_id',
@@ -157,7 +220,11 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             25,
             0,
             'destination',
-            esc_html__( 'e.g. -2140479 for Amsterdam', 'bookingcom-official-searchbox' ) 
+            esc_html__( 'e.g. -2140479 for Amsterdam', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            ''
         );
         $fields[ 'display_in_custom_post_types' ] = array(
             'display_in_custom_post_types',
@@ -168,8 +235,13 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             '',
             0,
             'destination',
-            '' 
+            '',
+            '',
+            '',
+            '',
+            ''
         );
+
         $fields[ 'bgcolor' ] = array(
             'bgcolor',
             'text',
@@ -178,19 +250,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            '' 
-        );
-        $fields[ 'headline_textsize' ] = array(
-            'headline_textsize',
-            'number',
-            esc_html__( 'Headline Text size', 'bookingcom-official-searchbox' ),
-            esc_html__( 'Font size in px', 'bookingcom-official-searchbox' ),
+            'colours',
             '',
             '',
             '',
-            'main',
-            ''
+            '',
+            'Searchbox'
         );
         $fields[ 'headline_textcolor' ] = array(
             'headline_textcolor',
@@ -200,8 +265,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            ''
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'textcolor' ] = array(
             'textcolor',
@@ -211,8 +280,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            '' 
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'dest_textcolor' ] = array(
             'dest_textcolor',
@@ -222,8 +295,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            ''
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'dest_bgcolor' ] = array(
             'dest_bgcolor',
@@ -233,8 +310,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            ''
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'flexdate_textcolor' ] = array(
             'flexdate_textcolor',
@@ -244,8 +325,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            ''
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'date_bgcolor' ] = array(
             'date_bgcolor',
@@ -255,8 +340,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            ''
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'date_textcolor' ] = array(
             'date_textcolor',
@@ -266,8 +355,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            ''
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'submit_bgcolor' ] = array(
             'submit_bgcolor',
@@ -277,8 +370,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            '' 
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'submit_bordercolor' ] = array(
             'submit_bordercolor',
@@ -288,8 +385,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            '' 
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'submit_textcolor' ] = array(
             'submit_textcolor',
@@ -299,8 +400,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'color',
-            '' 
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Searchbox'
         );
         $fields[ 'calendar_selected_bgcolor' ] = array(
             'calendar_selected_bgcolor',
@@ -310,8 +415,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'calendarcolor',
-            ''
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Calendar'
         );
         $fields[ 'calendar_selected_textcolor' ] = array(
             'calendar_selected_textcolor',
@@ -321,8 +430,12 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'calendarcolor',
-            ''
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Calendar'
         );
         $fields[ 'calendar_daynames_color' ] = array(
             'calendar_daynames_color',
@@ -332,63 +445,103 @@ if ( ! function_exists( 'bos_searchbox_settings_fields_array' ) ) :
             7,
             10,
             0,
-            'calendarcolor',
+            'colours',
+            '',
+            '',
+            '',
+            '',
+            'Calendar'
+        );
+
+        $fields[ 'headline_textsize' ] = array(
+            'headline_textsize',
+            'number',
+            esc_html__( 'Headline Text size', 'bookingcom-official-searchbox' ),
+            esc_html__( 'Font size in px', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            'searchbox_text',
+            '',
+            '',
+            '',
+            '',
             ''
         );
         $fields[ 'maintitle' ] = array(
             'maintitle',
             'text',
-            esc_html__( 'Default title ( e.g. Search hotels and more... )', 'bookingcom-official-searchbox' ),
-            '',
+            esc_html__( 'Default title', 'bookingcom-official-searchbox' ),
+            esc_html__( 'e.g. Search hotels and more...', 'bookingcom-official-searchbox' ),
             '',
             '',
             0,
-            'wording',
-            esc_html__( 'Search hotels and more...', 'bookingcom-official-searchbox' ) 
+            'searchbox_text',
+            esc_html__( 'Search hotels and more...', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            ''
         );
         $fields[ 'dest_title' ] = array(
             'dest_title',
             'text',
-            esc_html__( 'Destination ( e.g. Destination )', 'bookingcom-official-searchbox' ),
-            '',
+            esc_html__( 'Destination', 'bookingcom-official-searchbox' ),
+            esc_html__( 'e.g. Destination', 'bookingcom-official-searchbox' ),
             '',
             '',
             0,
-            'wording',
-            esc_html__( 'Destination', 'bookingcom-official-searchbox' ) 
+            'searchbox_text',
+            esc_html__( 'Destination', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            ''
         );
         $fields[ 'checkin' ] = array(
             'checkin',
             'text',
-            esc_html__( 'Check-in ( e.g. Check-in date )', 'bookingcom-official-searchbox' ),
-            '',
+            esc_html__( 'Check-in', 'bookingcom-official-searchbox' ),
+            esc_html__( 'e.g. Check-in date', 'bookingcom-official-searchbox' ),
             '',
             '',
             0,
-            'wording',
-            esc_html__( 'Check-in date', 'bookingcom-official-searchbox' ) 
+            'searchbox_text',
+            esc_html__( 'Check-in date', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            ''
         );
         $fields[ 'checkout' ] = array(
             'checkout',
             'text',
-            esc_html__( 'Check-out ( e.g. Check-out date )', 'bookingcom-official-searchbox' ),
-            '',
+            esc_html__( 'Check-out', 'bookingcom-official-searchbox' ),
+            esc_html__( 'e.g. Check-out date', 'bookingcom-official-searchbox' ),
             '',
             '',
             0,
-            'wording',
-            esc_html__( 'Check-out date', 'bookingcom-official-searchbox' ) 
+            'searchbox_text',
+            esc_html__( 'Check-out date', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            ''
         );
         $fields[ 'submit' ] = array(
             'submit',
             'text',
-            esc_html__( 'Submit button ( e.g. Search )', 'bookingcom-official-searchbox' ),
-            '',
+            esc_html__( 'Submit button', 'bookingcom-official-searchbox' ),
+            esc_html__( 'e.g. Search', 'bookingcom-official-searchbox' ),
             '',
             '',
             0,
-            'wording',
-            esc_html__( 'Search', 'bookingcom-official-searchbox' ) 
+            'searchbox_text',
+            esc_html__( 'Search', 'bookingcom-official-searchbox' ),
+            '',
+            '',
+            '',
+            ''
         );
         return $fields;
     }
