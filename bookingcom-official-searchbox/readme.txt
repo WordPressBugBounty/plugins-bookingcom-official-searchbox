@@ -1,9 +1,9 @@
 === Booking.com Official Search Box ===
-Contributors: Partnerships at Booking.com 
-Tags: search hotels, searchbox, accommodation, search accommodation widget, Booking.com, official accommodation searchbox, Booking.com Official Searchbox Plugin, destinations, travel, holidays, hotels, affiliation programme 
+Contributors: SP - Booking.com 
+Tags: search hotels, accommodation searchbox, Booking.com Official Searchbox, hotels, accommodation 
 Requires at least: 3.0
-Tested up to: 6.7.2
-Stable tag: 3.0.0
+Tested up to: 6.8.1
+Stable tag: 3.0.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ If you’re not an Affiliate Partner yet, you can still implement the plugin. To
 
 To implement the search box, simply drag and drop the plugin to the sidebar Widget area to publish it - then you’re done!
 
-Once installed, you can choose a pre-filled destination for the search box. This destination is linked to a destination ID, avoiding potential issues for multiple cities with the same name. You can also change the pre-filled destination for each page or post where the search box is displaying, thanks to the meta box feature showing at the end of the editing area.
+Once installed, you can choose a pre-filled destination for the search box. This destination is linked to a destination ID, avoiding potential issues for multiple cities with the same name. You can also change the pre-filled destination for each page or post where the search box is displaying, thanks to the meta box feature showed at the end of the editing area.
 
 You can even customize the colour, text, and size of the search box to fit your website design. Check the Features for more details.
 
@@ -29,7 +29,7 @@ You can even customize the colour, text, and size of the search box to fit your 
 * Try it before you publish: You can preview the plugin in your settings before it goes on your website
 * Multi-lingual search box and dashboard settings: Now available in over 40 languages and dialects.
 * Performances: Css and Javascript loaded only when needed
-* Support: You can always contact your Strategic Partnership Technical Team for technical support
+* Support: You can always contact your Strategic Partnerships Technical Team for technical support
 * Earn more: Join our [Booking.com Affiliate Partner Programme](https://www.booking.com/affiliate-program/v2/index.html)
 
 = Possible customisation =
@@ -45,6 +45,7 @@ You can even customize the colour, text, and size of the search box to fit your 
 * Choose specific destination for posts and pages
 * Change main colors: Background, text, button background, button border, button text 
 * Choose infinite colours from the colours picker
+* And much more...
 
 == Installation ==
 
@@ -76,7 +77,7 @@ Yes, it's possible. You don’t need to be an Affiliate Partner to implement the
 
 = Can I place the widget on multiple position ? =
 
-The Booking.com Official Search Box plugin can be placed on one sidebar only. Multiple search boxes in different widget areas in the same page would affect the functionalities. However, you can use the Meta Boxes feature to display the same widget with different destinations for each post and page.
+The Booking.com Official Search Box plugin can be placed on a sidebar and also in the content of a page (via Block Editor). Multiple search boxes in different widget areas in the same page would affect the functionalities. However, you can use the Meta Boxes feature to display the same widget with different destinations for each post and page.
 
 = Which WP version is the plugin compatible with ? =
 
@@ -84,13 +85,18 @@ The plugin will work from WP ver 3.0 onwards.
 
 == Screenshots ==
 
-1. Searchbox widget in the Widget section.
-2. Choose the sidebar which you would like the searchbox to be displayed on ( please choose only one sidebar in order to evoid javascript issues ).
-3. Here we go! Searchbox installed in your site ( in Content sidebar in this case ).  The default searchbox will fit the widget area width.
-4. If you like, you can customise the searchbox for your needs. A preview feature will help you to check the searchbox layout before going live on the website.
-5. Meta Boxes in post/page sections.
+1. Searchbox Main settings section.
+2. Searchbox Destination settings section.
+3. Searchbox Colour settings section.
+4. Searchbox Calendar settings section.
+5. Searchbox text settings section.
+6. Gutenberg block editor, with on the right some of the settings you can change for the widget in the content (not the sidebar) and on the bottom the meta box to change the destination.
+7. Example of the sidebar and content widget.
 
 == Changelog ==
+
+= 3.0.1 =
+* Fix : Calendar language not being picked up correctly.
 
 = 3.0.0 =
 * Release June 2025

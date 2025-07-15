@@ -1,13 +1,13 @@
 jQuery(function($) {
 
-    var checkin = moment();
-    var checkout = moment(checkin).add(1, 'd');
     var language = objectL10n.language;
     moment.locale(language);
+    var checkin = moment();
+    var checkout = moment(checkin).add(1, 'd');
 
     function cb(checkin, checkout) {
         var dateFormat = '';
-        if (language === 'de_DE') {
+        if (language == 'de_DE') {
             dateFormat = 'ddd., D. MMM. YYYY';
         } else {
             dateFormat = 'ddd, D MMM YYYY';
@@ -38,7 +38,7 @@ jQuery(function($) {
 
     function cb2(checkin, checkout) {
         var dateFormat = '';
-        if (language === 'de_DE') {
+        if (language == 'de_DE') {
             dateFormat = 'ddd., D. MMM. YYYY';
         } else {
             dateFormat = 'ddd, D MMM YYYY';
