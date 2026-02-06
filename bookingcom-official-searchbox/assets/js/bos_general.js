@@ -73,9 +73,9 @@
                 $('#flexi_searchbox').css('opacity', '1');
                 var dateFormat = '';
                 if (language === 'de_DE') {
-                    dateFormat = 'ddd., D. MMM. YYYY';
+                    dateFormat = 'ddd D. MMM YYYY';
                 } else {
-                    dateFormat = 'ddd, D MMM YYYY';
+                    dateFormat = 'ddd D MMM YYYY';
                 }
                 $('.b_dates_inner_wrapper div#bos-date_b_checkin').html(checkin.format(dateFormat));
                 $('#b_checkin').val(checkin.format('YYYY-MM-DD'));
@@ -86,9 +86,9 @@
                 function cb(checkin, checkout) {
                     var dateFormat = '';
                     if (language === 'de_DE') {
-                        dateFormat = 'ddd., D. MMM. YYYY';
+                        dateFormat = 'ddd D. MMM YYYY';
                     } else {
-                        dateFormat = 'ddd, D MMM YYYY';
+                        dateFormat = 'ddd D MMM YYYY';
                     }
                     $('.b_dates_inner_wrapper div#bos-date_b_checkin').html(checkin.format(dateFormat));
                     $('#b_checkin').val(checkin.format('YYYY-MM-DD'));

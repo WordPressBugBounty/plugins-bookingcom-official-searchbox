@@ -12,9 +12,10 @@
 
   $main_title = (!empty($attributes['sbTitle']) ? $attributes['sbTitle'] : (!empty($options['maintitle']) ? $options['maintitle'] : __( 'Search hotels and more...', 'bookingcom-official-searchbox' )));
   $dest_title = (!empty($attributes['destTitle']) ? $attributes['destTitle'] : (!empty($options['dest_title']) ? $options['dest_title'] : __( 'Destination', 'bookingcom-official-searchbox' )));
-  $checkin_title = (!empty($attributes['checkinTitle']) ? $attributes['checkinTitle'] : (!empty($options['checkin']) ? $options['checkin'] :__( 'Check-in date', 'bookingcom-official-searchbox' )));
-  $checkout_title = (!empty($attributes['checkoutTitle']) ? $attributes['checkoutTitle'] : (!empty($options['checkout']) ? $options['checkout'] :__( 'Check-out date', 'bookingcom-official-searchbox' )));
-  $submit_title = (!empty($attributes['submitTitle']) ? $attributes['submitTitle'] : (!empty($options['submit']) ? $options['submit'] :__( 'Search', 'bookingcom-official-searchbox' )));
+  $checkin_title = (!empty($attributes['checkinTitle']) ? $attributes['checkinTitle'] : (!empty($options['checkin']) ? $options['checkin'] : __( 'Check-in date', 'bookingcom-official-searchbox' )));
+  $checkout_title = (!empty($attributes['checkoutTitle']) ? $attributes['checkoutTitle'] : (!empty($options['checkout']) ? $options['checkout'] : __( 'Check-out date', 'bookingcom-official-searchbox' )));
+  $submit_title = (!empty($attributes['submitTitle']) ? $attributes['submitTitle'] : (!empty($options['submit']) ? $options['submit'] : __( 'Search', 'bookingcom-official-searchbox' )));
+  $placeholder = __( 'e.g. city, region, district or specific hotel', 'bookingcom-official-searchbox' );
   $aid_val = (!empty($attributes['aid']) ? $attributes['aid'] : (!empty($options['aid']) ? $options['aid'] : BOS_DEFAULT_AID));
   $width_val = (!empty($attributes['width']) ? 'width:' . $attributes['width'] : (!empty($options['widget_width']) ? 'width:' . $options['widget_width'] : ''));
   $cname_val = !empty($options['cname']) ? $options['cname'] : '';
@@ -76,25 +77,25 @@
           <?php if (!empty($bos_mb_destination)) {
             if ( $bos_mb_dest_type != 'select' && !empty( $bos_mb_dest_id ) ) { ?>
               <span class="b_dest_wrap">
-                <input type="text" class="b_destination" name="ss" value="<?php echo esc_attr($bos_mb_destination); ?>" placeholder="e.g. city, region, district or specific hotel" readonly="readonly" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
+                <input type="text" class="b_destination" name="ss" value="<?php echo esc_attr($bos_mb_destination); ?>" placeholder="<?php echo esc_attr($placeholder); ?>" readonly="readonly" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
               </span>
               <input class="b_dest_type" type="hidden" name="dest_type" value="<?php echo esc_attr($bos_mb_dest_type); ?>" />
               <input class="b_dest_id" type="hidden" name="dest_id" value="<?php echo esc_attr($bos_mb_dest_id); ?>" />
           <?php } else { ?>
-            <input type="text" class="b_destination" name="ss" value="<?php echo esc_attr($bos_mb_destination); ?>" placeholder="e.g. city, region, district or specific hotel" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
+            <input type="text" class="b_destination" name="ss" value="<?php echo esc_attr($bos_mb_destination); ?>" placeholder="<?php echo esc_attr($placeholder); ?>" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
           <?php }
           } elseif (!empty($dest_val)) { 
             if (!empty($dest_type_val) && !empty($dest_id_val)) { ?>
               <span class="b_dest_wrap">
-                <input type="text" class="b_destination" name="ss" value="<?php echo esc_attr($dest_val); ?>" readonly="readonly" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
+                <input type="text" class="b_destination" name="ss" placeholder="<?php echo esc_attr($placeholder); ?>" value="<?php echo esc_attr($dest_val); ?>" readonly="readonly" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
               </span>
               <input class="b_dest_type" type="hidden" name="dest_type" value="<?php echo esc_attr($dest_type_val); ?>" />
               <input class="b_dest_id" type="hidden" name="dest_id" value="<?php echo esc_attr($dest_id_val); ?>" />
             <?php } else { ?>
-              <input type="text" class="b_destination" name="ss" value="<?php echo esc_attr($dest_val); ?>" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
+              <input type="text" class="b_destination" name="ss" placeholder="<?php echo esc_attr($placeholder); ?>" value="<?php echo esc_attr($dest_val); ?>" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
             <?php } ?>
           <?php } else { ?>
-            <input type="text" class="b_destination" name="ss" placeholder="e.g. city, region, district or specific hotel" title="e.g. city, region, district or specific hotel" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
+            <input type="text" class="b_destination" name="ss" placeholder="<?php echo esc_attr($placeholder); ?>" title="<?php echo esc_attr($placeholder); ?>" style="<?php echo esc_attr($dest_bg_color_val); ?>; <?php echo esc_attr($dest_text_color_val);?>; <?php echo esc_attr($field_radius_val);?>px;" autocomplete="off" />
           <?php } ?>
         </div>
 

@@ -7,10 +7,10 @@ jQuery(function($) {
 
     function cb(checkin, checkout) {
         var dateFormat = '';
-        if (language == 'de_DE') {
-            dateFormat = 'ddd., D. MMM. YYYY';
+        if (language === 'de_DE') {
+            dateFormat = 'ddd D. MMM YYYY';
         } else {
-            dateFormat = 'ddd, D MMM YYYY';
+            dateFormat = 'ddd D MMM YYYY';
         }
         $('.b_dates_inner_wrapper div#bos-date_b_checkin').html(checkin.format(dateFormat));
         $('#b_checkin').val(checkin.format('YYYY-MM-DD'));
@@ -38,10 +38,10 @@ jQuery(function($) {
 
     function cb2(checkin, checkout) {
         var dateFormat = '';
-        if (language == 'de_DE') {
-            dateFormat = 'ddd., D. MMM. YYYY';
+        if (language === 'de_DE') {
+            dateFormat = 'ddd D. MMM YYYY';
         } else {
-            dateFormat = 'ddd, D MMM YYYY';
+            dateFormat = 'ddd D MMM YYYY';
         }
         $('.b_dates_inner_wrapper div.bos-date_b_checkin').html(checkin.format(dateFormat));
         $('.b_checkin').val(checkin.format('YYYY-MM-DD'));

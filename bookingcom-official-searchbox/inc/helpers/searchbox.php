@@ -192,24 +192,24 @@ if ( ! function_exists( 'bos_searchbox' ) ) :
                             $light_placeholder = wc_hex_is_light($args['dest_textcolor']) ? " light_placeholder" : "";
                             if ( !empty( $bos_mb_destination ) ) { //$bos_mb_destination can have values ONLY on page and single post template 
                                 if ( $bos_mb_dest_type != 'select' && !empty( $bos_mb_dest_id ) ) { // Set destination type and id if exists from meta boxes only if page or single post template
-                                    echo '<span class="b_dest_wrap"><input type="text" id="b_destination"  class="b_destination'.$light_placeholder.'" name="ss" value="' . esc_attr($bos_mb_destination) . '" readonly="readonly" style="' . esc_attr($dest_bgcolor) . esc_attr($dest_textcolor) . esc_attr($dest_border_radius) . '" />';
+                                    echo '<span class="b_dest_wrap"><input type="text" id="b_destination"  class="b_destination'.$light_placeholder.'" name="ss" placeholder="' . esc_html__( 'e.g. city, region, district or specific hotel', 'bookingcom-official-searchbox' ) . '" value="' . esc_attr($bos_mb_destination) . '" readonly="readonly" style="' . esc_attr($dest_bgcolor) . esc_attr($dest_textcolor) . esc_attr($dest_border_radius) . '" />';
                                     echo '</span>';
                                     echo '<input id="b_dest_type" type="hidden" name="dest_type" value="' . esc_attr($bos_mb_dest_type) . '" />';
                                     echo '<input id="b_dest_id" type="hidden" name="dest_id" value="' . esc_attr($bos_mb_dest_id) . '" />';
                                 } // !empty( $bos_mb_dest_type ) && !empty( $bos_mb_dest_id )  
                                 else {
-                                    echo '<input type="text" id="b_destination" class="b_destination'.$light_placeholder.'" name="ss" value="' . esc_attr($bos_mb_destination) . '" style="' . esc_attr($dest_bgcolor) . esc_attr($dest_textcolor) . esc_attr($dest_border_radius) . '" autocomplete="off" />';
+                                    echo '<input type="text" id="b_destination" class="b_destination'.$light_placeholder.'" name="ss" placeholder="' . esc_html__( 'e.g. city, region, district or specific hotel', 'bookingcom-official-searchbox' ) . '" value="' . esc_attr($bos_mb_destination) . '" style="' . esc_attr($dest_bgcolor) . esc_attr($dest_textcolor) . esc_attr($dest_border_radius) . '" autocomplete="off" />';
                                 }
                             } //!empty( $bos_mb_destination )
                             else if ( !empty( $args['destination'] ) ) {
                                 if ( $args['dest_type'] != BOS_DEST_TYPE && !empty( $args['dest_id'] ) ) { // Set destination type and id if exists from settings
-                                    echo '<span class="b_dest_wrap"><input type="text" id="b_destination"  class="b_destination'.$light_placeholder.'" name="ss" value="' . esc_attr($args['destination']) . '" readonly="readonly" style="' . esc_attr($dest_bgcolor) . esc_attr($dest_textcolor) . esc_attr($dest_border_radius) . '" />';
+                                    echo '<span class="b_dest_wrap"><input type="text" id="b_destination"  class="b_destination'.$light_placeholder.'" name="ss" value="' . esc_attr($args['destination']) . '" placeholder="' . esc_html__( 'e.g. city, region, district or specific hotel', 'bookingcom-official-searchbox' ) . '" readonly="readonly" style="' . esc_attr($dest_bgcolor) . esc_attr($dest_textcolor) . esc_attr($dest_border_radius) . '" />';
                                     echo '</span>';
                                     echo '<input id="b_dest_type" type="hidden" name="dest_type" value="' . esc_attr($args['dest_type']) . '" />';
                                     echo '<input id="b_dest_id" type="hidden" name="dest_id" value="' . esc_attr($args['dest_id']) . '" />';
                                 } //$dest_type != BOS_DEST_TYPE && !empty( $dest_id )
                                 else {
-                                    echo '<input type="text" id="b_destination" class="b_destination'.$light_placeholder.'" name="ss" value="' . esc_attr($args['destination']) . '" style="' . esc_attr($dest_bgcolor) . esc_attr($dest_textcolor) . esc_attr($dest_border_radius) . '" autocomplete="off" />';
+                                    echo '<input type="text" id="b_destination" class="b_destination'.$light_placeholder.'" name="ss" placeholder="' . esc_html__( 'e.g. city, region, district or specific hotel', 'bookingcom-official-searchbox' ) . '" value="' . esc_attr($args['destination']) . '" style="' . esc_attr($dest_bgcolor) . esc_attr($dest_textcolor) . esc_attr($dest_border_radius) . '" autocomplete="off" />';
                                 }
                             } //!empty( $destination )
                             else {

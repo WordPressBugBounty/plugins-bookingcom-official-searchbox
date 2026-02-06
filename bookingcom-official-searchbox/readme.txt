@@ -3,7 +3,7 @@ Contributors: SP - Booking.com
 Tags: search hotels, accommodation searchbox, Booking.com Official Searchbox, hotels, accommodation 
 Requires at least: 3.0
 Tested up to: 6.8.1
-Stable tag: 3.0.1
+Stable tag: 3.0.5
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,23 @@ The plugin will work from WP ver 3.0 onwards.
 7. Example of the sidebar and content widget.
 
 == Changelog ==
+
+= 3.0.5 =
+* Release November 2025
+* Fixing a persistent date issue in Block Editor.
+
+= 3.0.4 =
+* Release November 2025
+* Fix date format in Block Editor.
+
+= 3.0.3 =
+* Release November 2025
+* Fix: German Language format.
+
+= 3.0.2 =
+* Release October 2025
+* Fix: Language formats.
+* Fix: Missing translation for destination placeholder.
 
 = 3.0.1 =
 * Fix : Calendar language not being picked up correctly.
