@@ -17,7 +17,7 @@ if ( ! function_exists( 'bos_dateSelector' ) ) :
         $wp_system_language = get_locale();
 
         $checkin      = $checkin ? $checkin : esc_html__( 'Check-in date', 'bookingcom-official-searchbox' );
-        $checkout     = $checkout ? $checkout : esc_html____( 'Check-out date', 'bookingcom-official-searchbox' );
+        $checkout     = $checkout ? $checkout : esc_html__( 'Check-out date', 'bookingcom-official-searchbox' );
         $date_textcolor    = $date_textcolor ? 'color:' . esc_attr($date_textcolor) . ';' : 'color: #003580;';
         $date_bgcolor = $date_bgcolor ? 'background:' . esc_attr($date_bgcolor) . ';' : '';
         $date_border_radius = $fields_border_radius ? "border-radius:" . esc_attr($fields_border_radius) . "px;" : "";

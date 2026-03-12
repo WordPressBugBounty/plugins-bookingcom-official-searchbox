@@ -3,7 +3,7 @@ Contributors: SP - Booking.com
 Tags: search hotels, accommodation searchbox, Booking.com Official Searchbox, hotels, accommodation 
 Requires at least: 3.0
 Tested up to: 6.8.1
-Stable tag: 3.0.5
+Stable tag: 3.0.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,10 @@ The plugin will work from WP ver 3.0 onwards.
 7. Example of the sidebar and content widget.
 
 == Changelog ==
+
+= 3.0.6 =
+* Release March 2026
+* Fix: esc_html__ had too many underscores.
 
 = 3.0.5 =
 * Release November 2025

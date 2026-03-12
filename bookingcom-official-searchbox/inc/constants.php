@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'BOS_PLUGIN_NAME', 'Booking.com Official Search Box' );
-define( 'BOS_PLUGIN_VERSION', '2.3.1' );
+define( 'BOS_PLUGIN_VERSION', '3.0.6' );
 if ( ! defined( 'BOS_WP_VERSION' ) ) {
     define( 'BOS_WP_VERSION', get_bloginfo( 'version' ) );
 }
